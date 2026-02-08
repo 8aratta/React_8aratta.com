@@ -1,5 +1,13 @@
-declare var __WB_MANIFEST: any;
 /* eslint-disable no-restricted-globals */
+/* eslint-disable import/first */
+
+import { clientsClaim } from 'workbox-core';
+import { ExpirationPlugin } from 'workbox-expiration';
+import { precacheAndRoute, createHandlerBoundToURL } from 'workbox-precaching';
+import { registerRoute } from 'workbox-routing';
+import { StaleWhileRevalidate } from 'workbox-strategies';
+
+declare var __WB_MANIFEST: any;
 
 // This service worker can be customized!
 // See https://developers.google.com/web/tools/workbox/modules
@@ -7,12 +15,6 @@ declare var __WB_MANIFEST: any;
 // code you'd like.
 // You can also remove this file if you'd prefer not to use a
 // service worker, and the Workbox build step will be skipped.
-
-import { clientsClaim } from 'workbox-core';
-import { ExpirationPlugin } from 'workbox-expiration';
-import { precacheAndRoute, createHandlerBoundToURL } from 'workbox-precaching';
-import { registerRoute } from 'workbox-routing';
-import { StaleWhileRevalidate } from 'workbox-strategies';
 
 clientsClaim();
 
