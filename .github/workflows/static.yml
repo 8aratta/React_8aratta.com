@@ -41,7 +41,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: ./8aratta_com
-        run: npm ci
+        run: npm ci --legacy-peer-deps
 
       - name: Build React app
         working-directory: ./8aratta_com
