@@ -1,0 +1,1 @@
+export { DEFAULT_GRADIENT_CONFIG, MOUSE_SENSITIVITY } from './gradient';

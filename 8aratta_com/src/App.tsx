@@ -1,24 +1,14 @@
 import React from 'react';
 import { mergeStyles } from '@fluentui/react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Home from './pages/Home';
-import About from './pages/About';
-import Navigation from './components/Navigation';
-
-const navClass = mergeStyles({
-  padding: '1rem',
-  background: '#f0f0f0',
-  marginBottom: '2rem',
-  display: 'flex',
-  gap: '1rem',
-  justifyContent: 'center',
-  alignItems: 'center',
-});
+import Home from './pages/Home/Home';
+import About from './pages/About/About';
+// import Navigation from './components/Navigation';
 
 function App() {
   return (
     <Router>
-      <Navigation />
+      {/* <Navigation /> */}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
