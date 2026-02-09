@@ -1,6 +1,6 @@
 import React from 'react';
 import { useMousePosition, useGradientRotation } from '../../hooks';
-import { GradientBackground, DebugPanel } from '../../components';
+import { GradientBackground } from '../../components';
 import { DEFAULT_GRADIENT_CONFIG } from '../../constants/gradient';
 import styles from './Home.module.css';
 
