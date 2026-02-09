@@ -1,3 +1,4 @@
+/// <reference lib="webworker" />
 /* eslint-disable no-restricted-globals */
 /* eslint-disable import/first */
 
@@ -7,7 +8,11 @@ import { precacheAndRoute, createHandlerBoundToURL } from 'workbox-precaching';
 import { registerRoute } from 'workbox-routing';
 import { StaleWhileRevalidate } from 'workbox-strategies';
 
-declare var __WB_MANIFEST: any;
+// Extend the ServiceWorkerGlobalScope to include Workbox manifest
+export type {};
+declare const self: ServiceWorkerGlobalScope & {
+  __WB_MANIFEST: Array<{ revision: string | null; url: string }>;
+};
 
 // This service worker can be customized!
 // See https://developers.google.com/web/tools/workbox/modules
@@ -22,7 +27,7 @@ clientsClaim();
 // Their URLs are injected into the manifest variable below.
 // This variable must be present somewhere in your service worker file,
 // even if you decide not to use precaching. See https://cra.link/PWA
-precacheAndRoute(__WB_MANIFEST);
+precacheAndRoute(self.__WB_MANIFEST);
 
 // Set up App Shell-style routing, so that all navigation requests
 // are fulfilled with your index.html shell. Learn more at
@@ -66,9 +71,9 @@ registerRoute(
 
 // This allows the web app to trigger skipWaiting via
 // registration.waiting.postMessage({type: 'SKIP_WAITING'})
-self.addEventListener('message', (event: MessageEvent) => {
-  if (event.data && (event.data as any).type === 'SKIP_WAITING') {
-    (self as any).skipWaiting();
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
   }
 });
 
