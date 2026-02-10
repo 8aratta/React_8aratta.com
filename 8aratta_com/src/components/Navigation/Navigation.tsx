@@ -24,9 +24,10 @@ function Navigation() {
   return (
     <nav className={styles.nav}>
       <div className={styles.leftSection}>
-        <div className={styles.logo}>
-          {/* Logo placeholder - 200px reserved */}
-        </div>
+        <Link to="/" className={styles.logo}>
+          <span className={styles.logoFull}>8aratta</span>
+          <span className={styles.logoShort}>‹8›</span>
+        </Link>
         <span className={styles.clock}>{formatTime(time)}</span>
       </div>
       <div className={styles.links}>

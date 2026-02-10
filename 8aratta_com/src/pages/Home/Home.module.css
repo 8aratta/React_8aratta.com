@@ -117,14 +117,17 @@
     left: 5%;
     bottom: 5vh;
     text-align: left;
+    color: #fff;
   }
 
   .heroName {
     font-size: clamp(3rem, 15vw, 5rem);
+    color: #fff;
   }
 
   .heroDescription {
     font-size: clamp(1rem, 4vw, 1.5rem);
+    color: #fff;
   }
 }
 
@@ -136,13 +139,16 @@
 
   .heroText {
     bottom: 3vh;
+    color: #fff;
   }
 
   .heroName {
     font-size: clamp(2.5rem, 14vw, 4rem);
+    color: #fff;
   }
 
   .heroDescription {
     font-size: clamp(0.9rem, 4vw, 1.2rem);
+    color: #fff;
   }
 }
