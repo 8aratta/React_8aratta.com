@@ -8,26 +8,26 @@ export const DEFAULT_GRADIENT_CONFIG: GradientConfig = {
     color3: '#212121',
   },
   baseRotation: {
-    rotationX: 65,
+    rotationX: 20,
     rotationY: 0,
-    rotationZ: 0,
+    rotationZ: -0,
   },
   animation: {
-    speed: 0.3,
-    density: 1.5,
-    strength: 0.8,
+    speed: 0.5,
+    density: 8,
+    strength: 0.3,
   },
   camera: {
     azimuthAngle: 180,
     polarAngle: 80,
-    distance: 3,
+    distance: 1,
     zoom: 8,
   },
 };
 
 // Mouse interaction sensitivity
 export const MOUSE_SENSITIVITY = {
-  rotationX: 0,
-  rotationY: 0,
+  rotationX: 30,
+  rotationY: 15,
   rotationZ: 10,
 };

@@ -1,0 +1,23 @@
+.container {
+  position: relative;
+  width: 100vw;
+  min-height: 100vh;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  padding: 6rem 2rem 2rem;
+  color: #fff;
+}
+
+.content h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.content p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  max-width: 600px;
+}
