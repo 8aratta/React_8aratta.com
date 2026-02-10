@@ -9,9 +9,15 @@ This document outlines the folder structure and organization of the codebase.
 ```
 src/
 ├── assets/                    # Static assets (images, fonts, etc.)
+│   ├── Fonts/                # Custom fonts
+│   │   └── Resoft.ttf       # Primary brand font
+│   └── Images/               # Image files
 ├── components/                # Reusable UI components
 │   ├── index.ts              # Barrel export for all components
-│   ├── Navigation.tsx        # Main navigation component
+│   ├── Navigation/           # Main navigation component
+│   │   ├── index.ts
+│   │   ├── Navigation.tsx
+│   │   └── Navigation.module.css
 │   ├── DebugPanel/           # Debug overlay component
 │   │   ├── index.ts
 │   │   ├── DebugPanel.tsx
@@ -28,12 +34,14 @@ src/
 │   ├── useMousePosition.ts   # Mouse tracking hook
 │   └── useGradientRotation.ts # Rotation calculation hook
 ├── pages/                     # Page components (routes)
-│   ├── Home/                 # Home page
+│   ├── Home/                 # Home page with hero section
 │   │   ├── index.ts
 │   │   ├── Home.tsx
-│   │   └── Home.module.css
-│   └── About/                # About page (WIP)
+│   │   └── Home.module.css   # Includes animations & responsive design
+│   └── About/                # About page
+│       ├── index.ts
 │       ├── About.tsx
+│       └── About.module.css
 ├── types/                     # TypeScript type definitions
 │   └── index.ts              # All type interfaces
 ├── App.tsx                    # Main application component
@@ -41,4 +49,28 @@ src/
 ├── index.tsx                  # Application entry point
 ├── index.css                  # Global styles
 └── custom.d.ts               # Custom TypeScript declarations
+```
+
+## Documentation Structure
+
+```
+docs/
+├── PROJECT_STRUCTURE.md      # This file - overall project layout
+├── GitHubPages.md            # Deployment documentation
+├── components/               # Component documentation
+│   ├── Navigation.md         # Navigation component with clock & logo
+│   ├── GradientBackground.md # Shader gradient background
+│   └── DebugPanel.md        # Debug overlay component
+├── pages/                    # Page documentation
+│   └── Home.md              # Home page with animations
+├── hooks/                    # Custom hooks documentation
+│   ├── TEMPLATE.md          # Template for new hook docs
+│   ├── useMousePosition.md  # Mouse tracking hook
+│   └── useGradientRotation.md # Rotation calculation hook
+├── types/                    # Type definitions documentation
+│   ├── GradientConfig.md    # Gradient configuration types
+│   ├── MousePosition.md     # Mouse position types
+│   └── RotationValues.md    # Rotation value types
+└── constants/                # Constants documentation
+    └── gradient.md          # Gradient configuration constants
 ```
