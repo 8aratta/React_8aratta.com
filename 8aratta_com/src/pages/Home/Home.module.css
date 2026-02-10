@@ -33,19 +33,46 @@
   font-family: 'Resoft', sans-serif;
   font-size: clamp(8rem, 10vw, 10rem);
   line-height: 0.9;
-  color: #fff;
+  color: #ffffff90;
   mix-blend-mode: difference;
   margin: 0;
 }
 
 .heroDescription {
+  position: relative;
+  display: inline-block;
   font-family: 'Resoft', sans-serif;
   font-size: clamp(1.5rem, 3vw, 2.5rem);
   line-height: 1.2;
-  color: #fff;
+  color: #ffffff90;
   mix-blend-mode: difference;
   font-weight: 300;
   margin: 0.5rem 0 0 0;
+  padding: 1rem;
+}
+
+.heroDescription::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40%;
+  height: 30%;
+  border-top: 2px solid #ffffff90;
+  border-left: 2px solid #ffffff90;
+  mix-blend-mode: difference;
+}
+
+.heroDescription::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 40%;
+  height: 30%;
+  border-bottom: 2px solid #ffffff90;
+  border-right: 2px solid #ffffff90;
+  mix-blend-mode: difference;
 }
 
 .heroDescription span {
