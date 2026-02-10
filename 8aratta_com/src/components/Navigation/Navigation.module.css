@@ -8,12 +8,14 @@
   align-items: center;
   justify-content: space-between;
   padding: 1.5rem 2rem;
+  user-select: none;
 }
 
 .leftSection {
   display: flex;
   align-items: center;
   gap: 1rem;
+  user-select: none;
 }
 
 .logo {
@@ -26,6 +28,7 @@
   text-decoration: none;
   mix-blend-mode: difference;
   transition: opacity 0.2s ease;
+  user-select: none;
 }
 
 .logo:hover {
@@ -46,12 +49,14 @@
   font-weight: 500;
   mix-blend-mode: difference;
   font-variant-numeric: tabular-nums;
+  user-select: none;
 }
 
 .links {
   display: flex;
   gap: 0.5rem;
   align-items: center;
+  user-select: none;
 }
 
 .link {
@@ -61,6 +66,7 @@
   font-weight: 500;
   transition: opacity 0.2s ease;
   mix-blend-mode: difference;
+  user-select: none;
 }
 
 .link::after {

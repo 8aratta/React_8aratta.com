@@ -10,6 +10,7 @@
   width: 100vw;
   height: 100vh;
   overflow: hidden;
+  user-select: none;
 }
 
 .heroImage {
@@ -19,6 +20,7 @@
   max-height: 90vh;
   z-index: 1;
   pointer-events: none;
+  user-select: none;
 }
 
 .heroText {
@@ -27,6 +29,7 @@
   bottom: 10vh;
   z-index: 2;
   text-align: right;
+  user-select: none;
 }
 
 .heroName {
@@ -36,6 +39,7 @@
   color: #ffffff90;
   mix-blend-mode: difference;
   margin: 0;
+  user-select: none;
 }
 
 .heroDescription {
@@ -49,6 +53,7 @@
   font-weight: 300;
   margin: 0.5rem 0 0 0;
   padding: 1rem;
+  user-select: none;
 }
 
 .heroDescription::before {
@@ -88,6 +93,7 @@
   z-index: 3;
   padding: 20px;
   pointer-events: auto;
+  user-select: none;
 }
 
 /* Tablet styles */
