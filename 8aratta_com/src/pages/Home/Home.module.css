@@ -62,3 +62,62 @@
   padding: 20px;
   pointer-events: auto;
 }
+
+/* Tablet styles */
+@media (max-width: 1024px) {
+  .heroText {
+    right: 5%;
+    bottom: 8vh;
+  }
+
+  .heroName {
+    font-size: clamp(5rem, 12vw, 8rem);
+  }
+
+  .heroDescription {
+    font-size: clamp(1.2rem, 2.5vw, 2rem);
+  }
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+  .heroImage {
+    left: 50%;
+    transform: translateX(-50%);
+    max-height: 70vh;
+  }
+
+  .heroText {
+    right: auto;
+    left: 5%;
+    bottom: 5vh;
+    text-align: left;
+  }
+
+  .heroName {
+    font-size: clamp(3rem, 15vw, 5rem);
+  }
+
+  .heroDescription {
+    font-size: clamp(1rem, 4vw, 1.5rem);
+  }
+}
+
+/* Small mobile styles */
+@media (max-width: 480px) {
+  .heroImage {
+    max-height: 60vh;
+  }
+
+  .heroText {
+    bottom: 3vh;
+  }
+
+  .heroName {
+    font-size: clamp(2.5rem, 14vw, 4rem);
+  }
+
+  .heroDescription {
+    font-size: clamp(0.9rem, 4vw, 1.2rem);
+  }
+}

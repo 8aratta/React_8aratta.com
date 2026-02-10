@@ -61,3 +61,52 @@
 .link:hover::after {
   opacity: 1;
 }
+
+/* Mobile styles */
+@media (max-width: 768px) {
+  .nav {
+    padding: 1rem;
+  }
+
+  .leftSection {
+    gap: 0.5rem;
+  }
+
+  .logo {
+    width: 80px;
+  }
+
+  .clock {
+    font-size: 0.85rem;
+  }
+
+  .links {
+    gap: 0.3rem;
+  }
+
+  .link {
+    font-size: 0.85rem;
+  }
+
+  .link::after {
+    margin-left: 0.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav {
+    padding: 0.75rem;
+  }
+
+  .logo {
+    width: 40px;
+  }
+
+  .clock {
+    font-size: 0.75rem;
+  }
+
+  .link {
+    font-size: 0.75rem;
+  }
+}
