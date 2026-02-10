@@ -5,6 +5,29 @@
   font-style: normal;
 }
 
+/* Animations */
+@keyframes slideInFromLeft {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .container {
   position: relative;
   width: 100vw;
@@ -21,6 +44,7 @@
   z-index: 1;
   pointer-events: none;
   user-select: none;
+  animation: slideInFromLeft 1.5s ease-out;
 }
 
 .heroText {
@@ -40,6 +64,7 @@
   mix-blend-mode: difference;
   margin: 0;
   user-select: none;
+  animation: fadeInUp 1.5s ease-out 0.3s both;
 }
 
 .heroDescription {
@@ -54,6 +79,7 @@
   margin: 0.5rem 0 0 0;
   padding: 1rem;
   user-select: none;
+  animation: fadeInUp 1.5s ease-out 0.6s both;
 }
 
 .heroDescription::before {
