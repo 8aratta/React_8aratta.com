@@ -4,6 +4,7 @@ import { GradientBackground } from '../../components';
 import { DEFAULT_GRADIENT_CONFIG, MOUSE_SMOOTHING } from '../../constants/gradient';
 import styles from './Home.module.css';
 import MeImage from '../../assets/images/Me.png';
+import EnsoImage from '../../assets/images/enso.png'; // Uncomment when converted from .eps
 // import DebugPanel from '../../components/DebugPanel/DebugPanel';
 
 function Home() {
@@ -21,9 +22,12 @@ function Home() {
     >
       {/* <DebugPanel mousePos={mousePos} rotation={rotation} /> */}
       <GradientBackground rotation={rotation} />
-      
-      <img src={MeImage} alt="Domenico Baratta" className={styles.heroImage} loading="lazy" />
-      
+
+      <div className={styles.heroImageContainer}>
+        <img src={EnsoImage} alt="" className={styles.ensoBackground} aria-hidden="true" draggable="false" />
+        <img src={MeImage} alt="Domenico Baratta" className={styles.heroImage} loading="lazy" draggable="false" />
+      </div>
+
       <div className={styles.heroText}>
         <h1 className={styles.heroName}>
           <span>Barat<span className={styles.spacedT}>t</span>a</span>

@@ -25,18 +25,37 @@ function App() {
 ## Features
 
 - **Animated Hero Section**: Slide-in image with staggered text animations
-- **Interactive Gradient Background**: Mouse-responsive WebGL gradient
+- **Interactive Gradient Background**: Mouse-responsive WebGL gradient with smooth interpolation
+- **Enso Background Element**: Rotating circular element behind hero image
+- **Hover Interactions**: Hero image zoom and continuous enso rotation on hover
 - **Responsive Design**: Optimized layout for all device sizes
 - **Custom Typography**: Resoft font for brand consistency
 - **Non-selectable Content**: App-like user experience
+- **Undraggable Images**: All images prevent dragging
 
 ## Hero Section Components
 
-### Hero Image
-- **File**: Me.png (located in assets/Images/)
-- **Animation**: Slides in from left over 1.5 seconds
+### Hero Image Container
+- **Purpose**: Wraps hero image and enso background for coordinated positioning
 - **Positioning**: Bottom-left anchor point
+- **Interaction**: Enables hover detection for zoom and rotation effects
+- **Responsive**: Scales container height appropriately for mobile devices
+
+### Enso Background
+- **File**: enso.png (converted from enso.eps)
+- **Positioning**: Anchored to hero image at 20% from top, 30% from left
+- **Animation**: Rotates 360° over 5 seconds on page load, stops at end
+- **Hover Effect**: Rotates continuously (360° per 10 seconds) when hovering over hero image
+- **Blend Mode**: Uses `mix-blend-mode: multiply` for visual integration
+- **Opacity**: 0.5 on desktop, 0.2 on mobile
+
+### Hero Image
+- **File**: Me.png (located in assets/images/)
+- **Animation**: Slides in from left over 1.5 seconds
+- **Positioning**: Positioned within hero image container
+- **Hover Effect**: Scales to 1.03x (3% zoom) when hovering
 - **Responsive**: Scales appropriately for mobile devices
+- **Undraggable**: Cannot be dragged
 
 ### Hero Name
 - **Content**: Large display text with custom font
@@ -60,13 +79,41 @@ function App() {
     transform: translateX(-100%);
     opacity: 0;
   }
+
+@keyframes slideInAndRotate {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  30% {
+    opacity: 0;
+  }
   100% {
-    transform: translateX(0);
-    opacity: 1;
+    transform: translate(-50%, -50%) rotate(360deg);
+    opacity: 0.5;
   }
 }
 
-@keyframes fadeInUp {
+@keyframes continuousRotate {
+  from {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(720deg);
+  }
+}
+```
+
+### Animation SeHero animations are 1.5 seconds, enso initial rotation is 5 seconds
+- **Timing**: Smooth ease-out curves for natural movement
+- **Fill Mode**: `both` and `forwards` ensure elements remain in finaluration
+2. **Hero Image** (0s): Slides in from left - 1.5s duration
+3. **Hero Name** (0.3s): Fades in from bottom - 1.5s duration  
+4. **Hero Description** (0.6s): Fades in from bottom - 1.5s duration
+
+### Hover Animations
+- **Hero Image Zoom**: Scales to 1.03x with 0.6s smooth transition
+- **Enso Continuous Rotation**: Infinite rotation at 10s per cycle
   0% {
     opacity: 0;
     transform: translateY(30px);
@@ -87,9 +134,10 @@ function App() {
 ### Animation Properties
 - **Duration**: All animations are exactly 1.5 seconds
 - **Timing**: Smooth ease-out curves for natural movement
-- **Fill Mode**: `both` ensures elements start/end in correct states
-- **Performance**: GPU-accelerated transforms for smooth playback
-
+- **Fill Mode**: `both` ensures elements start/end with smooth interpolation (MOUSE_SMOOTHING constant)
+- **Rotation Logic**: Uses `useGradientRotation` hook  
+- **Interactive**: Background responds to cursor movement with smooth transitions
+- **Smooth Movement**: Mouse position interpolates at 0.1 factor (configurable) preventing jumps
 ## Responsive Breakpoints
 
 ### Desktop (>1024px)
@@ -111,9 +159,10 @@ function App() {
 - Further reduced image height to 60vh
 - Compact typography sizing
 - Minimal bottom spacing
-
-## Background Integration
-
+Undraggable Images**: Hero image and enso cannot be dragged
+- **Hover Interactions**: Smooth zoom and rotation effects on hero section hover
+- **Smooth Mouse Tracking**: Gradient rotation smoothly follows cursor with interpolation
+- **Accessibility**: Semantic HTML structure with proper alt attributes
 The page integrates with the `GradientBackground` component:
 - **Mouse Tracking**: Uses `useMousePosition` hook
 - **Rotation Logic**: Uses `useGradientRotation` hook  
@@ -147,9 +196,9 @@ The page integrates with the `GradientBackground` component:
 
 ## CSS Modules
 
-```css
-.container { /* Full viewport container */ }
-.heroImage { /* Hero image positioning & animation */ }
+```cssContainer { /* Wraps hero image and enso */ }
+.ensoBackground { /* Enso circle positioning and animation */ }
+.heroImage { /* Hero image styling and hover transition */ }
 .heroText { /* Text container positioning */ }
 .heroName { /* Main heading styling */ }
 .heroDescription { /* Description text with borders */ }
@@ -158,8 +207,11 @@ The page integrates with the `GradientBackground` component:
 
 ## Dependencies
 
-- React hooks for gradient interaction
+- React hooks for gradient interaction (useMousePosition, useGradientRotation)
 - GradientBackground component
 - CSS Modules for scoped styling
+- Resoft font family
+- Mouse position tracking with smooth interpolation
+- enso.png and Me.png image assetng
 - Resoft font family
 - Mouse position tracking hooks
