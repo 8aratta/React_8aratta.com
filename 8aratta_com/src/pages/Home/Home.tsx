@@ -3,7 +3,7 @@ import { useMousePosition, useGradientRotation } from '../../hooks';
 import { GradientBackground } from '../../components';
 import { DEFAULT_GRADIENT_CONFIG } from '../../constants/gradient';
 import styles from './Home.module.css';
-import MeImage from '../../assets/Me.png';
+import MeImage from '../../assets/images/Me.png';
 // import DebugPanel from '../../components/DebugPanel/DebugPanel';
 
 function Home() {
@@ -22,7 +22,7 @@ function Home() {
       {/* <DebugPanel mousePos={mousePos} rotation={rotation} /> */}
       <GradientBackground rotation={rotation} />
       
-      <img src={MeImage} alt="Domenico Baratta" className={styles.heroImage} />
+      <img src={MeImage} alt="Domenico Baratta" className={styles.heroImage} loading="lazy" />
       
       <div className={styles.heroText}>
         <h1 className={styles.heroName}>
