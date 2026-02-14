@@ -12,6 +12,10 @@ src/
 │   ├── fonts/                # Custom fonts
 │   │   └── Resoft.ttf       # Primary brand font
 │   └── Images/               # Image files
+│       ├── Me.png           # Hero image
+│       ├── enso.png         # Enso circle background
+│       ├── logo.png         # Logo (light theme)
+│       └── logo_white.png   # Logo (dark theme)
 ├── components/                # Reusable UI components
 │   ├── index.ts              # Barrel export for all components
 │   ├── Navigation/           # Main navigation component
@@ -28,10 +32,13 @@ src/
 │       └── GradientBackground.module.css
 ├── constants/                 # Application constants
 │   ├── index.ts              # Barrel export
-│   └── gradient.ts           # Gradient configuration
+│   └── gradient.ts           # Gradient configuration (dark/light themes)
+├── contexts/                  # React Context providers
+│   ├── index.ts              # Barrel export
+│   └── ThemeContext.tsx      # Theme state management
 ├── hooks/                     # Custom React hooks
 │   ├── index.ts              # Barrel export
-│   ├── useMousePosition.ts   # Mouse tracking hook
+│   ├── useMousePosition.ts   # Mouse tracking hook with smoothing
 │   └── useGradientRotation.ts # Rotation calculation hook
 ├── pages/                     # Page components (routes)
 │   ├── Home/                 # Home page with hero section
@@ -44,7 +51,7 @@ src/
 │       └── About.module.css
 ├── types/                     # TypeScript type definitions
 │   └── index.ts              # All type interfaces
-├── App.tsx                    # Main application component
+├── App.tsx                    # Main application component (wrapped with ThemeProvider)
 ├── App.css                    # Global app styles
 ├── index.tsx                  # Application entry point
 ├── index.css                  # Global styles
@@ -58,19 +65,22 @@ docs/
 ├── PROJECT_STRUCTURE.md      # This file - overall project layout
 ├── GitHubPages.md            # Deployment documentation
 ├── components/               # Component documentation
-│   ├── Navigation.md         # Navigation component with clock & logo
+│   ├── Navigation.md         # Navigation with clock, logo & theme toggle
 │   ├── GradientBackground.md # Shader gradient background
 │   └── DebugPanel.md        # Debug overlay component
+├── contexts/                 # Context documentation
+│   └── ThemeContext.md      # Theme state management
 ├── pages/                    # Page documentation
-│   └── Home.md              # Home page with animations
+│   ├── Home.md              # Home page with animations & theme support
+│   └── About.md             # About page with gradient background
 ├── hooks/                    # Custom hooks documentation
 │   ├── TEMPLATE.md          # Template for new hook docs
-│   ├── useMousePosition.md  # Mouse tracking hook
+│   ├── useMousePosition.md  # Mouse tracking with smooth interpolation
 │   └── useGradientRotation.md # Rotation calculation hook
 ├── types/                    # Type definitions documentation
 │   ├── GradientConfig.md    # Gradient configuration types
 │   ├── MousePosition.md     # Mouse position types
 │   └── RotationValues.md    # Rotation value types
 └── constants/                # Constants documentation
-    └── gradient.md          # Gradient configuration constants
+    └── gradient.md          # Gradient configs (dark/light themes) & mouse settings
 ```

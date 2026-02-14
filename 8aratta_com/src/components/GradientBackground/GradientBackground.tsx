@@ -1,7 +1,8 @@
 import React from 'react';
 import { ShaderGradientCanvas, ShaderGradient } from '@shadergradient/react';
 import { RotationValues, GradientConfig } from '../../types';
-import { DEFAULT_GRADIENT_CONFIG } from '../../constants/gradient';
+import { DARK_GRADIENT_CONFIG, LIGHT_GRADIENT_CONFIG } from '../../constants/gradient';
+import { useTheme } from '../../contexts';
 
 interface GradientBackgroundProps {
   rotation: RotationValues;
@@ -15,12 +16,16 @@ export function GradientBackground({
   rotation,
   config = {},
 }: GradientBackgroundProps) {
+  const { theme } = useTheme();
+  
+  const baseConfig = theme === 'dark' ? DARK_GRADIENT_CONFIG : LIGHT_GRADIENT_CONFIG;
+  
   const mergedConfig = {
-    ...DEFAULT_GRADIENT_CONFIG,
+    ...baseConfig,
     ...config,
-    colors: { ...DEFAULT_GRADIENT_CONFIG.colors, ...config.colors },
-    animation: { ...DEFAULT_GRADIENT_CONFIG.animation, ...config.animation },
-    camera: { ...DEFAULT_GRADIENT_CONFIG.camera, ...config.camera },
+    colors: { ...baseConfig.colors, ...config.colors },
+    animation: { ...baseConfig.animation, ...config.animation },
+    camera: { ...baseConfig.camera, ...config.camera },
   };
 
   return (

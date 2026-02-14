@@ -26,6 +26,7 @@ function App() {
 
 - **Animated Hero Section**: Slide-in image with staggered text animations
 - **Interactive Gradient Background**: Mouse-responsive WebGL gradient with smooth interpolation
+- **Theme-aware Styling**: Text colors and borders automatically adapt to dark/light theme
 - **Enso Background Element**: Rotating circular element behind hero image
 - **Hover Interactions**: Hero image zoom and continuous enso rotation on hover
 - **Responsive Design**: Optimized layout for all device sizes
@@ -186,13 +187,53 @@ The page integrates with the `GradientBackground` component:
 - Scales naturally between breakpoints
 - Maintains readability across devices
 
+## Theme Support
+
+The Home page integrates with ThemeContext to provide theme-aware styling:
+
+### Text Colors
+
+**Dark Theme (Default)**
+- Hero text: `#ffffff90` (90% white with transparency)
+- Mobile text: `#fff` (solid white)
+- Borders: `#ffffff90`
+
+**Light Theme**
+- Hero text: `#00000090` (90% black with transparency)
+- Mobile text: `#000` (solid black)
+- Borders: `#00000090`
+
+### Implementation
+
+The component uses `data-theme` attribute for CSS targeting:
+
+```tsx
+<div className={styles.container} data-theme={theme}>
+  {/* Hero content */}
+</div>
+```
+
+```css
+/* Default (dark theme) */
+.heroName { color: #ffffff90; }
+
+/* Light theme override */
+.container[data-theme="light"] .heroName { color: #00000090; }
+```
+
+### Gradient Background
+
+The gradient colors automatically switch based on theme:
+- Dark theme: Gray scale (#888888 → #555555 → #000000)
+- Light theme: Inverted scale (#ffffff → #dddddd → #8f8f8f)
+
 ## User Experience
 
 - **Non-selectable**: All text elements prevent selection
-- **Pointer Events**: Image is non-interactive (pointer-events: none)
-- **Smooth Scrolling**: Optimized for performance
-- **Accessibility**: Semantic HTML structure
-- **Visual Hierarchy**: Clear content prioritization
+- **Undraggable Images**: Hero image and enso cannot be dragged
+- **Hover Interactions**: Smooth zoom and rotation effects on hero section hover
+- **Smooth Mouse Tracking**: Gradient rotation smoothly follows cursor with interpolation
+- **Accessibility**: Semantic HTML structure with proper alt attributes
 
 ## CSS Modules
 
@@ -208,10 +249,11 @@ The page integrates with the `GradientBackground` component:
 ## Dependencies
 
 - React hooks for gradient interaction (useMousePosition, useGradientRotation)
-- GradientBackground component
+- ThemeContext (useTheme hook) for theme state
+- GradientBackground component with theme support
 - CSS Modules for scoped styling
 - Resoft font family
-- Mouse position tracking with smooth interpolation
-- enso.png and Me.png image assetng
-- Resoft font family
-- Mouse position tracking hooks
+- Mouse position tracking with smooth interpolation (MOUSE_SMOOTHING constant)
+- Image assets:
+  - enso.png (background element)
+  - Me.png (hero image)

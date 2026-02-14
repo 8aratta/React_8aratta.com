@@ -2,12 +2,14 @@ import React from 'react';
 import { useMousePosition, useGradientRotation } from '../../hooks';
 import { GradientBackground } from '../../components';
 import { DEFAULT_GRADIENT_CONFIG, MOUSE_SMOOTHING } from '../../constants/gradient';
+import { useTheme } from '../../contexts';
 import styles from './Home.module.css';
 import MeImage from '../../assets/images/Me.png';
 import EnsoImage from '../../assets/images/enso.png'; // Uncomment when converted from .eps
 // import DebugPanel from '../../components/DebugPanel/DebugPanel';
 
 function Home() {
+  const { theme } = useTheme();
   const { mousePos, handleMouseMove, handleMouseLeave } = useMousePosition(MOUSE_SMOOTHING);
   const rotation = useGradientRotation({
     mousePos,
@@ -17,6 +19,7 @@ function Home() {
   return (
     <div
       className={styles.container}
+      data-theme={theme}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >

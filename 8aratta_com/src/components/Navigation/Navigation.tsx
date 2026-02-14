@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './Navigation.module.css';
-import logo from '../../assets/images/logo_white.png';
+import logoWhite from '../../assets/images/logo_white.png';
+import logoDark from '../../assets/images/logo.png';
+import { useTheme } from '../../contexts';
 
 function Navigation() {
   const [time, setTime] = useState(new Date());
+  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -22,8 +25,10 @@ function Navigation() {
     });
   };
 
+  const logo = theme === 'dark' ? logoWhite : logoDark;
+
   return (
-    <nav className={styles.nav}>
+    <nav className={styles.nav} data-theme={theme}>
       <div className={styles.leftSection}>
         <Link to="/" className={styles.logo}>
           <img src={logo} alt="8aratta" draggable="false" />
@@ -33,6 +38,13 @@ function Navigation() {
       <div className={styles.links}>
         <Link to="/" className={styles.link}>Home</Link>
         <Link to="/about" className={styles.link}>About</Link>
+        <button 
+          onClick={toggleTheme} 
+          className={styles.themeToggle}
+          aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+        >
+          {theme === 'dark' ? '⚪' : '⚫️'}
+        </button>
       </div>
     </nav>
   );

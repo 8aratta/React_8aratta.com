@@ -11,6 +11,10 @@
   color: #fff;
 }
 
+.container[data-theme="light"] .content {
+  color: #000;
+}
+
 .content h2 {
   font-size: 2.5rem;
   margin-bottom: 1rem;

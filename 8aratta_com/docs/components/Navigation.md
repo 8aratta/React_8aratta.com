@@ -1,6 +1,6 @@
 # Navigation
 
-A responsive navigation component with logo image, real-time clock, and page links.
+A responsive navigation component with logo image, real-time clock, page links, and theme toggle.
 
 ## Location
 
@@ -30,8 +30,10 @@ function App() {
 ## Features
 
 - **Real-time Clock**: Displays current time with automatic updates every second
-- **Image Logo**: Displays logo.png with responsive sizing
+- **Theme Toggle**: Button to switch between dark and light modes
+- **Dynamic Logo**: Switches between logo_white.png (dark theme) and logo.png (light theme)
 - **Undraggable Logo**: Logo image cannot be dragged
+- **Theme-aware Text**: Clock and links change color based on active theme
 - **Mix Blend Mode**: Uses `mix-blend-mode: difference` for optimal contrast over backgrounds
 - **Non-selectable**: All text is made non-selectable for app-like feel
 - **Home Navigation**: Logo functions as clickable home button
@@ -47,6 +49,30 @@ function App() {
 
 ### Right Section
 - **Navigation Links**: Home and About pages with visual separators
+- **Theme Toggle Button**: 
+  - Dark mode: Shows ⚪ (white circle)
+  - Light mode: Shows ⚫️ (black circle)
+  - Includes accessible aria-label for screen readers
+  - Smooth hover effects: opacity and scale transitions
+
+## Theme Integration
+
+The Navigation component integrates with the ThemeContext to provide:
+
+1. **Dynamic Logo Switching**
+   - Dark theme: Uses `logo_white.png`
+   - Light theme: Uses `logo.png`
+   - Seamless transition when theme changes
+
+2. **Text Color Adaptation**
+   - Clock and navigation links automatically adjust:
+   - Dark theme: White text (#fff)
+   - Light theme: Black text (#000)
+
+3. **Theme Toggle Functionality**
+   - Button click triggers `toggleTheme()` from ThemeContext
+   - Theme persists in localStorage
+   - All components react to theme changes immediately
 
 ## Responsive Behavior
 
@@ -57,10 +83,12 @@ function App() {
 ### Tablet (≤768px)
 - Reduced padding and font sizes
 - Logo width: 40px
+- Theme toggle: 1.25rem font size
 
 ### Mobile (≤480px)
 - Further reduced font sizes
 - Logo width: 35px
+- Theme toggle: 1.1rem font size
 - Minimal padding for compact display
 - Maintains vertical centering
 
@@ -77,21 +105,36 @@ function App() {
 The component uses scoped CSS modules for styling isolation:
 
 ```css
-.nav { /* Main navigation container */ }
+.nav { /* Main navigation container with data-theme attribute */ }
 .leftSection { /* Logo and clock container */ }
-.logo { /* Logo styling with responsive font */ }
-.logoFull { /* Flink wrapper */ }
+.logo { /* Logo styling with responsive sizing */ }
 .logo img { /* Logo image with responsive sizing */ }
-.clock { /* Real-time clock styling */ }
-.links { /* Navigation links container */ }
-.link { /* Individual link styling */ }
+.clock { /* Real-time clock styling - theme-aware colors */ }
+.links { /* Navigation links and theme toggle container */ }
+.link { /* Individual link styling - theme-aware colors */ }
+.themeToggle { /* Theme toggle button with hover effects */ }
+```
+
+### Theme-aware Styles
+
+```css
+/* Dark theme (default) */
+.clock { color: #fff; }
+.link { color: #fff; }
+
+/* Light theme */
+.nav[data-theme="light"] .clock { color: #000; }
+.nav[data-theme="light"] .link { color: #000; }
 ```
 
 ## Dependencies
 
 - React Router (`Link` component for navigation)
+- ThemeContext (`useTheme` hook for theme state and toggle)
 - CSS Modules for scoped styling
-- logo.png image asset
+- Image assets:
+  - `logo_white.png` (dark theme)
+  - `logo.png` (light theme)
 ## Auto-Updates
 
 The clock automatically updates every second using:

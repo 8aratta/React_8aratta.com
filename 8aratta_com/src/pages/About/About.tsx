@@ -2,9 +2,11 @@ import React from 'react';
 import { useMousePosition, useGradientRotation } from '../../hooks';
 import { GradientBackground } from '../../components';
 import { DEFAULT_GRADIENT_CONFIG, MOUSE_SMOOTHING } from '../../constants/gradient';
+import { useTheme } from '../../contexts';
 import styles from './About.module.css';
 
 function About() {
+  const { theme } = useTheme();
   const { mousePos, handleMouseMove, handleMouseLeave } = useMousePosition(MOUSE_SMOOTHING);
   const rotation = useGradientRotation({
     mousePos,
@@ -14,6 +16,7 @@ function About() {
   return (
     <div
       className={styles.container}
+      data-theme={theme}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
