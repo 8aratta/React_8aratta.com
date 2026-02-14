@@ -9,7 +9,7 @@ This document outlines the folder structure and organization of the codebase.
 ```
 src/
 ├── assets/                    # Static assets (images, fonts, etc.)
-│   ├── Fonts/                # Custom fonts
+│   ├── fonts/                # Custom fonts
 │   │   └── Resoft.ttf       # Primary brand font
 │   └── Images/               # Image files
 ├── components/                # Reusable UI components

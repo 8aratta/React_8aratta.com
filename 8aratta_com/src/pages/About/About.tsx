@@ -1,11 +1,11 @@
 import React from 'react';
 import { useMousePosition, useGradientRotation } from '../../hooks';
 import { GradientBackground } from '../../components';
-import { DEFAULT_GRADIENT_CONFIG } from '../../constants/gradient';
+import { DEFAULT_GRADIENT_CONFIG, MOUSE_SMOOTHING } from '../../constants/gradient';
 import styles from './About.module.css';
 
 function About() {
-  const { mousePos, handleMouseMove, handleMouseLeave } = useMousePosition();
+  const { mousePos, handleMouseMove, handleMouseLeave } = useMousePosition(MOUSE_SMOOTHING);
   const rotation = useGradientRotation({
     mousePos,
     baseRotation: DEFAULT_GRADIENT_CONFIG.baseRotation,

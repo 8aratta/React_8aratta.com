@@ -1,13 +1,13 @@
 import React from 'react';
 import { useMousePosition, useGradientRotation } from '../../hooks';
 import { GradientBackground } from '../../components';
-import { DEFAULT_GRADIENT_CONFIG } from '../../constants/gradient';
+import { DEFAULT_GRADIENT_CONFIG, MOUSE_SMOOTHING } from '../../constants/gradient';
 import styles from './Home.module.css';
 import MeImage from '../../assets/images/Me.png';
 // import DebugPanel from '../../components/DebugPanel/DebugPanel';
 
 function Home() {
-  const { mousePos, handleMouseMove, handleMouseLeave } = useMousePosition();
+  const { mousePos, handleMouseMove, handleMouseLeave } = useMousePosition(MOUSE_SMOOTHING);
   const rotation = useGradientRotation({
     mousePos,
     baseRotation: DEFAULT_GRADIENT_CONFIG.baseRotation,
@@ -26,9 +26,10 @@ function Home() {
       
       <div className={styles.heroText}>
         <h1 className={styles.heroName}>
-          <span>Baratta</span>
+          <span>Barat<span className={styles.spacedT}>t</span>a</span>
           <span>Domenico</span>
         </h1>
+
         <h2 className={styles.heroDescription}>
           <span>Web Designer</span>
           <span>Developer</span>

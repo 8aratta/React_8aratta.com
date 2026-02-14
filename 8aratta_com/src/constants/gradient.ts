@@ -3,23 +3,23 @@ import { GradientConfig } from '../types';
 // Default grayscale gradient configuration
 export const DEFAULT_GRADIENT_CONFIG: GradientConfig = {
   colors: {
-    color1: '#606060',
-    color2: '#909090',
-    color3: '#212121',
+    color1: '#888888',
+    color2: '#555555',
+    color3: '#000000',
   },
   baseRotation: {
-    rotationX: 20,
+    rotationX: 0,
     rotationY: 0,
-    rotationZ: -0,
+    rotationZ: 45,
   },
   animation: {
-    speed: 0.5,
-    density: 8,
-    strength: 0.3,
+    speed: 0.3,
+    density: 5,
+    strength: 0.8,
   },
   camera: {
     azimuthAngle: 180,
-    polarAngle: 80,
+    polarAngle: 90,
     distance: 1,
     zoom: 8,
   },
@@ -27,7 +27,12 @@ export const DEFAULT_GRADIENT_CONFIG: GradientConfig = {
 
 // Mouse interaction sensitivity
 export const MOUSE_SENSITIVITY = {
-  rotationX: 30,
-  rotationY: 15,
-  rotationZ: 10,
+  rotationX: -45,
+  rotationY: 45,
+  rotationZ: 45,
 };
+
+// Mouse movement smoothing (0.1 = smooth, 1.0 = instant)
+// Lower values = smoother but slower response
+// Higher values = faster but less smooth
+export const MOUSE_SMOOTHING = 0.1;

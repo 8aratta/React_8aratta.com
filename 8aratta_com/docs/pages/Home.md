@@ -126,7 +126,7 @@ The page integrates with the `GradientBackground` component:
 ```css
 @font-face {
   font-family: 'Resoft';
-  src: url('../../assets/Fonts/Resoft.ttf') format('truetype');
+  src: url('../../assets/fonts/Resoft.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
