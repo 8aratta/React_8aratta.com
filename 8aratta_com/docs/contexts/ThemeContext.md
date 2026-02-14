@@ -153,10 +153,17 @@ function StyledComponent() {
 
 ## Components Using ThemeContext
 
+### ThemeToggle
+- Dedicated theme switching button component
+- Desktop: Appears in Navigation bar (inline)
+- Mobile: Appears as floating button in bottom left
+- Uses responsive display logic to prevent duplicates
+- Provides theme toggle button with emoji icons
+
 ### Navigation
 - Switches logo between `logo_white.png` and `logo.png`
 - Updates text colors for clock and links
-- Provides theme toggle button
+- Integrates ThemeToggle component (desktop only)
 
 ### GradientBackground
 - Switches between `DARK_GRADIENT_CONFIG` and `LIGHT_GRADIENT_CONFIG`
@@ -232,7 +239,8 @@ This ensures the hook is only used within components wrapped by ThemeProvider.
 
 ## Related
 
-- [Navigation Component](../components/Navigation.md) - Theme toggle implementation
+- [ThemeToggle Component](../components/ThemeToggle.md) - Dedicated theme toggle button
+- [Navigation Component](../components/Navigation.md) - Theme toggle implementation (desktop)
 - [GradientBackground Component](../components/GradientBackground.md) - Theme-based gradients
 - [Gradient Constants](../constants/gradient.md) - DARK/LIGHT configurations
 - [Home Page](../pages/Home.md) - Theme-aware hero section

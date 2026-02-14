@@ -28,6 +28,10 @@ src/
 │   │   ├── index.ts
 │   │   ├── Navigation.tsx
 │   │   └── Navigation.module.css
+│   ├── ThemeToggle/          # Theme switcher button component
+│   │   ├── index.ts
+│   │   ├── ThemeToggle.tsx
+│   │   └── ThemeToggle.module.css
 │   ├── DebugPanel/           # Debug overlay component
 │   │   ├── index.ts
 │   │   ├── DebugPanel.tsx
@@ -72,6 +76,7 @@ docs/
 ├── GitHubPages.md            # Deployment documentation
 ├── components/               # Component documentation
 │   ├── Navigation.md         # Navigation with clock, logo & theme toggle
+│   ├── ThemeToggle.md        # Responsive theme toggle button
 │   ├── GradientBackground.md # Shader gradient background
 │   └── DebugPanel.md        # Debug overlay component
 ├── contexts/                 # Context documentation

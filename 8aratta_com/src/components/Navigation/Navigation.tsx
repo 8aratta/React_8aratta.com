@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './Navigation.module.css';
 import { useTheme } from '../../contexts';
+import ThemeToggle from '../ThemeToggle';
 
 function Navigation() {
   const [time, setTime] = useState(new Date());
-  const { theme, toggleTheme } = useTheme();
+  const { theme } = useTheme();
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -36,13 +37,7 @@ function Navigation() {
       <div className={styles.links}>
         <Link to="/" className={styles.link}>Home</Link>
         <Link to="/about" className={styles.link}>About</Link>
-        <button 
-          onClick={toggleTheme} 
-          className={styles.themeToggle}
-          aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-        >
-          {theme === 'dark' ? '⚪' : '⚫️'}
-        </button>
+        <ThemeToggle className={styles.desktopOnly} />
       </div>
     </nav>
   );

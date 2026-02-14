@@ -61,27 +61,8 @@
   user-select: none;
 }
 
-.themeToggle {
-  background: transparent;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-  padding: 0.5rem;
+.desktopOnly {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: opacity 0.2s ease, transform 0.2s ease;
-  user-select: none;
-  mix-blend-mode: difference;
-}
-
-.themeToggle:hover {
-  opacity: 0.7;
-  transform: scale(1.1);
-}
-
-.themeToggle:active {
-  transform: scale(0.95);
 }
 
 .link {
@@ -149,9 +130,8 @@
     margin-left: 0.3rem;
   }
 
-  .themeToggle {
-    font-size: 1.25rem;
-    padding: 0.4rem;
+  .desktopOnly {
+    display: none;
   }
 }
 
@@ -172,10 +152,5 @@
 
   .link {
     font-size: 0.75rem;
-  }
-
-  .themeToggle {
-    font-size: 1.1rem;
-    padding: 0.3rem;
   }
 }

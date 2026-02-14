@@ -30,13 +30,14 @@ function App() {
 ## Features
 
 - **Real-time Clock**: Displays current time with automatic updates every second
-- **Theme Toggle**: Button to switch between dark and light modes
+- **Theme Toggle (Desktop Only)**: Integrated ThemeToggle component (hidden on mobile)
 - **Dynamic Logo**: Switches between logo_white.png (dark theme) and logo.png (light theme)
 - **Undraggable Logo**: Logo image cannot be dragged
 - **Theme-aware Text**: Clock and links change color based on active theme
 - **Mix Blend Mode**: Uses `mix-blend-mode: difference` for optimal contrast over backgrounds
 - **Non-selectable**: All text is made non-selectable for app-like feel
 - **Home Navigation**: Logo functions as clickable home button
+- **Responsive Layout**: Theme toggle visibility adapts to screen size
 
 ## Structure
 
@@ -49,11 +50,11 @@ function App() {
 
 ### Right Section
 - **Navigation Links**: Home and About pages with visual separators
-- **Theme Toggle Button**: 
-  - Dark mode: Shows ⚪ (white circle)
-  - Light mode: Shows ⚫️ (black circle)
-  - Includes accessible aria-label for screen readers
-  - Smooth hover effects: opacity and scale transitions
+- **Theme Toggle Component**: 
+  - Imported from `ThemeToggle` component
+  - Visible on desktop (>768px)
+  - Hidden on mobile devices (≤768px) - floating button used instead
+  - See [ThemeToggle documentation](./ThemeToggle.md) for details
 
 ## Theme Integration
 
@@ -69,28 +70,29 @@ The Navigation component integrates with the ThemeContext to provide:
    - Dark theme: White text (#fff)
    - Light theme: Black text (#000)
 
-3. **Theme Toggle Functionality**
-   - Button click triggers `toggleTheme()` from ThemeContext
-   - Theme persists in localStorage
-   - All components react to theme changes immediately
+3. **Theme Toggle Integration**
+   - Uses separate `ThemeToggle` component
+   - Applied `.desktopOnly` class for responsive hiding
+   - Mobile users access theme toggle via floating button (see [ThemeToggle](./ThemeToggle.md))
 
 ## Responsive Behavior
 
 ### Desktop (>768px)
-- Full navigation with 200px logo width
+- Full navigation with logo, clock, links, and theme toggle
+- Logo width: 75px
 - Standard padding and spacing
 
 ### Tablet (≤768px)
 - Reduced padding and font sizes
 - Logo width: 40px
-- Theme toggle: 1.25rem font size
+- **Theme toggle hidden from navigation** (floating button shown instead)
 
 ### Mobile (≤480px)
 - Further reduced font sizes
 - Logo width: 35px
-- Theme toggle: 1.1rem font size
 - Minimal padding for compact display
 - Maintains vertical centering
+- **Theme toggle completely removed from navigation bar**
 
 ## Styling Features
 
@@ -112,7 +114,7 @@ The component uses scoped CSS modules for styling isolation:
 .clock { /* Real-time clock styling - theme-aware colors */ }
 .links { /* Navigation links and theme toggle container */ }
 .link { /* Individual link styling - theme-aware colors */ }
-.themeToggle { /* Theme toggle button with hover effects */ }
+.desktopOnly { /* Class to hide elements on mobile (≤768px) */ }
 ```
 
 ### Theme-aware Styles
@@ -127,10 +129,25 @@ The component uses scoped CSS modules for styling isolation:
 .nav[data-theme="light"] .link { color: #000; }
 ```
 
+### Responsive Visibility
+
+```css
+.desktopOnly {
+  display: flex;
+}
+
+@media (max-width: 768px) {
+  .desktopOnly {
+    display: none;  /* Hide on mobile */
+  }
+}
+```
+
 ## Dependencies
 
 - React Router (`Link` component for navigation)
-- ThemeContext (`useTheme` hook for theme state and toggle)
+- ThemeContext (`useTheme` hook for theme state)
+- ThemeToggle component (for desktop theme switching)
 - CSS Modules for scoped styling
 - Image assets (in `public/assets/images/`):
   - `logo_white.png` (dark theme)
@@ -145,12 +162,26 @@ const logo = theme === 'dark'
   ? '/assets/images/logo_white.png' 
   : '/assets/images/logo.png';
 ```
+
+### Component Usage
+
+```tsx
+import ThemeToggle from '../ThemeToggle';
+
+// In Navigation component
+<ThemeToggle className={styles.desktopOnly} />
+```
 ## Auto-Updates
 
 The clock automatically updates every second using:
 - `useState` for time state management
 - `useEffect` with `setInterval` for continuous updates
 - Cleanup function to prevent memory leaks on unmount
+
+## Related Components
+
+- [ThemeToggle](./ThemeToggle.md) - Separate theme toggle button component
+- [ThemeContext](../contexts/ThemeContext.md) - Theme state management
 
 ## Accessibility
 
