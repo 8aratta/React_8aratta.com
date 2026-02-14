@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'Resoft';
-  src: url('../../assets/fonts/Resoft.ttf') format('truetype');
+  src: url(../../../public/assets/fonts/Resoft.ttf) format('truetype');
   font-weight: normal;
   font-style: normal;
 }

@@ -132,9 +132,19 @@ The component uses scoped CSS modules for styling isolation:
 - React Router (`Link` component for navigation)
 - ThemeContext (`useTheme` hook for theme state and toggle)
 - CSS Modules for scoped styling
-- Image assets:
+- Image assets (in `public/assets/images/`):
   - `logo_white.png` (dark theme)
   - `logo.png` (light theme)
+
+### Image References
+
+Images are served from the public folder and referenced with absolute paths:
+
+```tsx
+const logo = theme === 'dark' 
+  ? '/assets/images/logo_white.png' 
+  : '/assets/images/logo.png';
+```
 ## Auto-Updates
 
 The clock automatically updates every second using:

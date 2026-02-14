@@ -173,14 +173,19 @@ The page integrates with the `GradientBackground` component:
 ## Typography System
 
 ### Font Loading
+
+The Resoft font is loaded from the public folder:
+
 ```css
 @font-face {
   font-family: 'Resoft';
-  src: url('../../assets/fonts/Resoft.ttf') format('truetype');
+  src: url('/assets/fonts/Resoft.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 ```
+
+**Note**: Font file is served from `public/assets/fonts/Resoft.ttf`
 
 ### Responsive Text Sizing
 - Uses CSS `clamp()` for fluid typography
@@ -252,8 +257,17 @@ The gradient colors automatically switch based on theme:
 - ThemeContext (useTheme hook) for theme state
 - GradientBackground component with theme support
 - CSS Modules for scoped styling
-- Resoft font family
+- Resoft font family (from `public/assets/fonts/`)
 - Mouse position tracking with smooth interpolation (MOUSE_SMOOTHING constant)
-- Image assets:
-  - enso.png (background element)
-  - Me.png (hero image)
+- Image assets (from `public/assets/images/`):
+  - `enso.png` (background element)
+  - `Me.png` (hero image)
+
+### Image References
+
+Images are served from the public folder and referenced with absolute paths:
+
+```tsx
+<img src="/assets/images/enso.png" alt="" />
+<img src="/assets/images/Me.png" alt="Domenico Baratta" />
+```

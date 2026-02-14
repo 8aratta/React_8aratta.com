@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './Navigation.module.css';
-import logoWhite from '../../assets/images/logo_white.png';
-import logoDark from '../../assets/images/logo.png';
 import { useTheme } from '../../contexts';
 
 function Navigation() {
@@ -25,7 +23,7 @@ function Navigation() {
     });
   };
 
-  const logo = theme === 'dark' ? logoWhite : logoDark;
+  const logo = theme === 'dark' ? '/assets/images/logo_white.png' : '/assets/images/logo.png';
 
   return (
     <nav className={styles.nav} data-theme={theme}>

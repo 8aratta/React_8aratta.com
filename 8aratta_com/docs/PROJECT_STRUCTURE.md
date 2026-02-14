@@ -7,15 +7,21 @@ This document outlines the folder structure and organization of the codebase.
 ## Directory Layout
 
 ```
-src/
+public/
 ├── assets/                    # Static assets (images, fonts, etc.)
 │   ├── fonts/                # Custom fonts
 │   │   └── Resoft.ttf       # Primary brand font
-│   └── Images/               # Image files
+│   └── images/               # Image files
 │       ├── Me.png           # Hero image
 │       ├── enso.png         # Enso circle background
 │       ├── logo.png         # Logo (light theme)
 │       └── logo_white.png   # Logo (dark theme)
+├── CNAME
+├── index.html
+├── manifest.json
+└── robots.txt
+
+src/
 ├── components/                # Reusable UI components
 │   ├── index.ts              # Barrel export for all components
 │   ├── Navigation/           # Main navigation component
