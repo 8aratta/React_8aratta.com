@@ -141,4 +141,3 @@ npx serve -s build
 ## Related Documentation
 
 - [GitHub Pages Documentation](https://docs.github.com/en/pages)
-- [Create React App Deployment](https://create-react-app.dev/docs/deployment/#github-pages)
