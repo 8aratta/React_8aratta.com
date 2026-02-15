@@ -4,7 +4,7 @@
   font-size: 1.5rem;
   cursor: pointer;
   padding: 0.5rem;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   transition: opacity 0.2s ease, transform 0.2s ease;
@@ -34,7 +34,7 @@
   height: 3.5rem;
   font-size: 1.5rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  display: none;
+  display: flex;
   mix-blend-mode: normal;
 }
 
@@ -43,17 +43,6 @@
   transform: scale(1.05);
 }
 
-/* Show mobile button only on mobile devices */
-@media (max-width: 768px) {
-  .themeToggle.mobile {
-    display: flex;
-  }
-  
-  /* Hide desktop version on mobile */
-  .themeToggle:not(.mobile) {
-    display: none;
-  }
-}
 
 /* Small mobile responsive */
 @media (max-width: 480px) {

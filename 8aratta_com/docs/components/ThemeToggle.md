@@ -1,6 +1,6 @@
 # ThemeToggle
 
-A reusable theme toggle button component with responsive positioning behavior.
+A floating theme toggle button component that appears in the bottom left corner of the screen on all devices.
 
 ## Location
 
@@ -15,23 +15,6 @@ import ThemeToggle from '../components/ThemeToggle';
 ```
 
 ## Usage
-
-### Desktop (Navigation Bar)
-
-```tsx
-import ThemeToggle from '../ThemeToggle';
-
-function Navigation() {
-  return (
-    <nav>
-      {/* Other navigation elements */}
-      <ThemeToggle className={styles.desktopOnly} />
-    </nav>
-  );
-}
-```
-
-### Mobile (Floating Button)
 
 ```tsx
 import { ThemeToggle } from '../components';
@@ -55,54 +38,35 @@ function App() {
 
 ## Features
 
-- **Dual Display Modes**: Desktop inline or mobile floating button
+- **Fixed Positioning**: Always appears in bottom left corner
+- **Floating Button**: Circular design with backdrop blur effect
 - **Theme Icons**: 
   - Dark mode: ⚪ (white circle)
   - Light mode: ⚫️ (black circle)
 - **Accessible**: Includes aria-label for screen readers
 - **Smooth Animations**: Hover effects with opacity and scale transitions
-- **Responsive**: Automatically hides/shows based on screen size
-- **Backdrop Blur**: Mobile version has glassmorphism effect
+- **Glassmorphism**: Backdrop blur with semi-transparent background
+- **Always Visible**: Available on all screen sizes
 
 ## Behavior
 
-### Desktop Mode (default)
-- Renders as inline button
-- Uses `mix-blend-mode: difference` for contrast
-- Visible only on screens >768px width
-- Appears in Navigation component
+The ThemeToggle appears as a fixed floating button in the bottom left corner on all devices:
 
-### Mobile Mode (`isMobile={true}`)
-- Fixed positioning in bottom left corner
-- Circular floating button design
-- Backdrop blur effect with shadow
-- Visible only on screens ≤768px width
-- Appears in App root, outside Navigation
+- Fixed positioning: `bottom: 2rem; left: 2rem`
+- Circular button design with backdrop blur
+- Floats above all content (z-index: 1000)
+- No responsive visibility changes - always visible
 
 ## Responsive Design
 
-### Desktop (>768px)
+### All Screen Sizes
 ```css
-.themeToggle:not(.mobile) {
-  display: flex;          /* Visible */
-}
-
 .themeToggle.mobile {
-  display: none;          /* Hidden */
-}
-```
-
-### Mobile (≤768px)
-```css
-.themeToggle:not(.mobile) {
-  display: none;          /* Hidden */
-}
-
-.themeToggle.mobile {
-  display: flex;          /* Visible */
   position: fixed;
   bottom: 2rem;
   left: 2rem;
+  display: flex;
+  /* Glassmorphism styling */
 }
 ```
 
@@ -112,23 +76,18 @@ function App() {
 
 ## Styling
 
-### Desktop Button
-- Transparent background
-- Font size: 1.5rem
-- Padding: 0.5rem
-- Mix blend mode for automatic contrast
-
-### Mobile Floating Button
+### Floating Button
 - Semi-transparent white background: `rgba(255, 255, 255, 0.1)`
 - Backdrop filter: `blur(10px)`
 - Border radius: 50% (circular)
 - Size: 3.5rem × 3.5rem (desktop), 3rem × 3rem (mobile)
 - Box shadow: `0 4px 12px rgba(0, 0, 0, 0.15)`
 - Z-index: 1000 (above all content)
+- Font size: 1.5rem (desktop), 1.3rem (mobile)
 
 ### Hover Effects
-- Opacity: 0.7
-- Scale: 1.1 (desktop) / 1.05 (mobile)
+- Background opacity increase: `rgba(255, 255, 255, 0.2)`
+- Scale: 1.05
 - Smooth transitions: 0.2s ease
 
 ### Active State
@@ -152,30 +111,19 @@ const { theme, toggleTheme } = useTheme();
 ## CSS Modules
 
 ```css
-.themeToggle { /* Base button styles */ }
-.themeToggle.mobile { /* Fixed floating button */ }
-.themeToggle:not(.mobile) { /* Inline navigation button */ }
+.themeToggle { /* Base button styles (hidden by default) */ }
+.themeToggle.mobile { /* Fixed floating button (always visible) */ }
 ```
 
 ## Implementation Pattern
 
-The ThemeToggle component is instantiated twice in the application:
+The ThemeToggle component is instantiated once in the application root (App.tsx):
 
-1. **Desktop Instance** (Navigation.tsx)
-   ```tsx
-   <ThemeToggle className={styles.desktopOnly} />
-   ```
-   - Hidden on mobile via `.desktopOnly` class
-   - Integrated into navigation bar
+```tsx
+<ThemeToggle isMobile={true} />
+```
 
-2. **Mobile Instance** (App.tsx)
-   ```tsx
-   <ThemeToggle isMobile={true} />
-   ```
-   - Hidden on desktop via internal `.mobile` styles
-   - Floats above all content
-
-This ensures only one theme toggle is visible at any screen size, preventing duplicate controls.
+This creates a single floating button that's visible on all screen sizes and floats above all content.
 
 ## Accessibility
 
@@ -191,9 +139,9 @@ This ensures only one theme toggle is visible at any screen size, preventing dup
 
 ## Related
 
-- [Navigation Component](./Navigation.md) - Uses ThemeToggle in desktop mode
+- [Navigation Component](./Navigation.md) - Main navigation bar
 - [ThemeContext](../contexts/ThemeContext.md) - Theme state management
-- [App Component](../../src/App.tsx) - Uses ThemeToggle in mobile mode
+- [App Component](../../src/App.tsx) - Uses ThemeToggle as floating button
 
 ## Performance
 

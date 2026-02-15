@@ -155,15 +155,15 @@ function StyledComponent() {
 
 ### ThemeToggle
 - Dedicated theme switching button component
-- Desktop: Appears in Navigation bar (inline)
-- Mobile: Appears as floating button in bottom left
-- Uses responsive display logic to prevent duplicates
+- Appears as floating button in bottom left corner
+- Visible on all screen sizes
+- Uses responsive sizing for mobile devices
 - Provides theme toggle button with emoji icons
 
 ### Navigation
 - Switches logo between `logo_white.png` and `logo.png`
 - Updates text colors for clock and links
-- Integrates ThemeToggle component (desktop only)
+- Does not include theme toggle (separate floating button used)
 
 ### GradientBackground
 - Switches between `DARK_GRADIENT_CONFIG` and `LIGHT_GRADIENT_CONFIG`

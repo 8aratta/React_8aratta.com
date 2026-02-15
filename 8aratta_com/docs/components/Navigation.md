@@ -30,14 +30,13 @@ function App() {
 ## Features
 
 - **Real-time Clock**: Displays current time with automatic updates every second
-- **Theme Toggle (Desktop Only)**: Integrated ThemeToggle component (hidden on mobile)
 - **Dynamic Logo**: Switches between logo_white.png (dark theme) and logo.png (light theme)
 - **Undraggable Logo**: Logo image cannot be dragged
 - **Theme-aware Text**: Clock and links change color based on active theme
 - **Mix Blend Mode**: Uses `mix-blend-mode: difference` for optimal contrast over backgrounds
 - **Non-selectable**: All text is made non-selectable for app-like feel
 - **Home Navigation**: Logo functions as clickable home button
-- **Responsive Layout**: Theme toggle visibility adapts to screen size
+- **Responsive Layout**: Adapts to all screen sizes
 
 ## Structure
 
@@ -50,11 +49,8 @@ function App() {
 
 ### Right Section
 - **Navigation Links**: Home and About pages with visual separators
-- **Theme Toggle Component**: 
-  - Imported from `ThemeToggle` component
-  - Visible on desktop (>768px)
-  - Hidden on mobile devices (≤768px) - floating button used instead
-  - See [ThemeToggle documentation](./ThemeToggle.md) for details
+
+**Note**: Theme toggle is implemented as a separate floating button (see [ThemeToggle](./ThemeToggle.md)), not part of the Navigation component.
 
 ## Theme Integration
 
@@ -70,29 +66,24 @@ The Navigation component integrates with the ThemeContext to provide:
    - Dark theme: White text (#fff)
    - Light theme: Black text (#000)
 
-3. **Theme Toggle Integration**
-   - Uses separate `ThemeToggle` component
-   - Applied `.desktopOnly` class for responsive hiding
-   - Mobile users access theme toggle via floating button (see [ThemeToggle](./ThemeToggle.md))
+**Theme Switching**: Handled by separate ThemeToggle component (floating button in bottom left)
 
 ## Responsive Behavior
 
 ### Desktop (>768px)
-- Full navigation with logo, clock, links, and theme toggle
+- Full navigation with logo, clock, and links
 - Logo width: 75px
 - Standard padding and spacing
 
 ### Tablet (≤768px)
 - Reduced padding and font sizes
 - Logo width: 40px
-- **Theme toggle hidden from navigation** (floating button shown instead)
 
 ### Mobile (≤480px)
 - Further reduced font sizes
 - Logo width: 35px
 - Minimal padding for compact display
 - Maintains vertical centering
-- **Theme toggle completely removed from navigation bar**
 
 ## Styling Features
 
@@ -112,9 +103,8 @@ The component uses scoped CSS modules for styling isolation:
 .logo { /* Logo styling with responsive sizing */ }
 .logo img { /* Logo image with responsive sizing */ }
 .clock { /* Real-time clock styling - theme-aware colors */ }
-.links { /* Navigation links and theme toggle container */ }
+.links { /* Navigation links container */ }
 .link { /* Individual link styling - theme-aware colors */ }
-.desktopOnly { /* Class to hide elements on mobile (≤768px) */ }
 ```
 
 ### Theme-aware Styles
@@ -129,25 +119,10 @@ The component uses scoped CSS modules for styling isolation:
 .nav[data-theme="light"] .link { color: #000; }
 ```
 
-### Responsive Visibility
-
-```css
-.desktopOnly {
-  display: flex;
-}
-
-@media (max-width: 768px) {
-  .desktopOnly {
-    display: none;  /* Hide on mobile */
-  }
-}
-```
-
 ## Dependencies
 
 - React Router (`Link` component for navigation)
 - ThemeContext (`useTheme` hook for theme state)
-- ThemeToggle component (for desktop theme switching)
 - CSS Modules for scoped styling
 - Image assets (in `public/assets/images/`):
   - `logo_white.png` (dark theme)
@@ -161,15 +136,6 @@ Images are served from the public folder and referenced with absolute paths:
 const logo = theme === 'dark' 
   ? '/assets/images/logo_white.png' 
   : '/assets/images/logo.png';
-```
-
-### Component Usage
-
-```tsx
-import ThemeToggle from '../ThemeToggle';
-
-// In Navigation component
-<ThemeToggle className={styles.desktopOnly} />
 ```
 ## Auto-Updates
 

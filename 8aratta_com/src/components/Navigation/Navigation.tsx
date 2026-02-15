@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './Navigation.module.css';
 import { useTheme } from '../../contexts';
-import ThemeToggle from '../ThemeToggle';
 
 function Navigation() {
   const [time, setTime] = useState(new Date());
@@ -37,7 +36,6 @@ function Navigation() {
       <div className={styles.links}>
         <Link to="/" className={styles.link}>Home</Link>
         <Link to="/about" className={styles.link}>About</Link>
-        <ThemeToggle className={styles.desktopOnly} />
       </div>
     </nav>
   );
