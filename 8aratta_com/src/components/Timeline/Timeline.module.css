@@ -1,0 +1,214 @@
+/* ===== Container ===== */
+.container {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  scroll-snap-type: y mandatory;
+}
+
+/* ===== Continuous vertical line ===== */
+.line {
+  position: absolute;
+  left: 24px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--timeline-line-color, rgba(255, 255, 255, 0.15));
+  z-index: 0;
+}
+
+/* ===== Node (circle) ===== */
+.node {
+  position: relative;
+  border-radius: 50%;
+  border: 2px solid var(--timeline-node-border, rgba(255, 255, 255, 0.4));
+  background: var(--timeline-node-bg, #0a0a0a);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+  z-index: 1;
+}
+
+.nodeParent {
+  width: 20px;
+  height: 20px;
+}
+
+.nodeChild {
+  width: 14px;
+  height: 14px;
+}
+
+.nodeActive {
+  border-color: var(--timeline-node-active, #ffffff);
+  transform: scale(1.4);
+}
+
+.nodeActive.nodeParent {
+  width: 24px;
+  height: 24px;
+}
+
+.nodeDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--timeline-node-active, #ffffff);
+}
+
+/* ===== Section (parent) — snap checkpoint ===== */
+.section {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  scroll-snap-align: start;
+}
+
+/* 50vh gap between sections */
+.sectionGap {
+  height: 50vh;
+  flex-shrink: 0;
+  scroll-snap-align: none;
+}
+
+/* ===== Section header — pinned at top ===== */
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 15% 0 1rem;
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.sectionNodeColumn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 50px;
+}
+
+.sectionLabel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--timeline-title-color, #ffffff);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sectionSubtitle {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--timeline-text-muted, rgba(255, 255, 255, 0.6));
+  transition: opacity 0.2s ease;
+}
+
+/* ===== Scrollable entries area ===== */
+.sectionScroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-left: 50px;
+  padding-right: 1rem;
+  margin-left: 1rem;
+
+  /* Hide scrollbar */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+.sectionScroll::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+/* ===== Entry (child) — content block inside scroll area ===== */
+.entry {
+  padding: 1.5rem 0;
+  border-bottom: 1px solid var(--timeline-line-color, rgba(255, 255, 255, 0.08));
+}
+
+.entry:last-child {
+  border-bottom: none;
+}
+
+.entryTitle {
+  margin: 0 0 0.75rem;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--timeline-subtitle-color, rgba(255, 255, 255, 0.85));
+}
+
+.entryBody {
+  color: var(--timeline-text-color, rgba(255, 255, 255, 0.7));
+  line-height: 1.6;
+}
+
+/* ===== Theme support ===== */
+:global([data-theme="light"]) .container {
+  --timeline-line-color: rgba(0, 0, 0, 0.15);
+  --timeline-node-border: rgba(0, 0, 0, 0.3);
+  --timeline-node-bg: #ffffff;
+  --timeline-node-active: #000000;
+  --timeline-title-color: #000000;
+  --timeline-subtitle-color: rgba(0, 0, 0, 0.85);
+  --timeline-text-color: rgba(0, 0, 0, 0.7);
+  --timeline-text-muted: rgba(0, 0, 0, 0.5);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .line {
+    left: 16px;
+  }
+
+  .sectionNodeColumn {
+    min-width: 34px;
+  }
+
+  .sectionHeader {
+    gap: 0.75rem;
+    padding: 15% 0 0.75rem;
+  }
+
+  .sectionScroll {
+    padding-left: 34px;
+  }
+
+  .sectionTitle {
+    font-size: 1.25rem;
+  }
+
+  .entryTitle {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .line {
+    left: 12px;
+  }
+
+  .sectionNodeColumn {
+    min-width: 26px;
+  }
+
+  .sectionScroll {
+    padding-left: 26px;
+  }
+
+  .sectionTitle {
+    font-size: 1.1rem;
+  }
+}
