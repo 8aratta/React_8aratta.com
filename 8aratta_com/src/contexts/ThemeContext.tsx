@@ -29,7 +29,11 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   }, [theme]);
 
   const toggleTheme = () => {
-    setTheme((prevTheme) => (prevTheme === 'dark' ? 'light' : 'dark'));
+    setTheme((prevTheme) => {
+      const newTheme = prevTheme === 'dark' ? 'light' : 'dark';
+      console.log('[ThemeContext] Toggling from', prevTheme, 'to', newTheme);
+      return newTheme;
+    });
   };
 
   return (
