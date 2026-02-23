@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { useSnapScroll } from './useSnapScroll';
+import { TimelineConnector, Orientation } from './TimelineConnector';
 import styles from './Timeline.module.css';
 
 interface TimelineProps {
@@ -13,15 +14,25 @@ export function Timeline({ children }: TimelineProps) {
 
   const childArray = React.Children.toArray(children);
 
+  // Extract orientation from each TimelineSection child
+  const orientations: Orientation[] = childArray.map((child) => {
+    if (React.isValidElement<{ orientation?: Orientation }>(child)) {
+      return child.props.orientation ?? 'left';
+    }
+    return 'left';
+  });
+
   return (
     <div ref={containerRef} className={styles.container}>
-      <div className={styles.line} />
       {childArray.map((child, index) => (
         <React.Fragment key={index}>
           {child}
-          {/* 50vh gap between sections (not after last) */}
+          {/* Connector between sections (not after last) */}
           {index < childArray.length - 1 && (
-            <div className={styles.sectionGap} />
+            <TimelineConnector
+              from={orientations[index]}
+              to={orientations[index + 1]}
+            />
           )}
         </React.Fragment>
       ))}

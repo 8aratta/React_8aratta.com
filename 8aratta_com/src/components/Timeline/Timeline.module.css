@@ -7,17 +7,6 @@
   scroll-snap-type: y mandatory;
 }
 
-/* ===== Continuous vertical line ===== */
-.line {
-  position: absolute;
-  left: 24px;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background: var(--timeline-line-color, rgba(255, 255, 255, 0.15));
-  z-index: 0;
-}
-
 /* ===== Node (circle) ===== */
 .node {
   position: relative;
@@ -68,11 +57,23 @@
   scroll-snap-align: start;
 }
 
-/* 50vh gap between sections */
-.sectionGap {
-  height: 50vh;
-  flex-shrink: 0;
-  scroll-snap-align: none;
+/* Per-section vertical line */
+.sectionLine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--timeline-line-color, rgba(255, 255, 255, 0.15));
+  z-index: 0;
+}
+
+.sectionLineLeft {
+  left: 24px;
+}
+
+.sectionLineRight {
+  right: 24px;
+  left: auto;
 }
 
 /* ===== Section header — pinned at top ===== */
@@ -115,6 +116,32 @@
   transition: opacity 0.2s ease;
 }
 
+/* ===== Right orientation — mirror layout ===== */
+.sectionRight .sectionHeader {
+  flex-direction: row-reverse;
+}
+
+.sectionRight .sectionLabel {
+  text-align: right;
+  align-items: flex-end;
+}
+
+.sectionRight .sectionScroll {
+  padding-left: 1rem;
+  padding-right: 50px;
+  margin-left: 0;
+  margin-right: 1rem;
+  text-align: right;
+}
+
+.sectionRight .entryTitle {
+  text-align: right;
+}
+
+.sectionRight .entryBody {
+  text-align: right;
+}
+
 /* ===== Scrollable entries area ===== */
 .sectionScroll {
   flex: 1;
@@ -155,6 +182,41 @@
   line-height: 1.6;
 }
 
+/* ===== Connector (50vh gap between sections) ===== */
+.connector {
+  position: relative;
+  height: 80vh;
+  flex-shrink: 0;
+  scroll-snap-align: none;
+}
+
+/* Straight connector line */
+.connectorLine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--timeline-line-color, rgba(255, 255, 255, 0.15));
+}
+
+.connectorLineLeft {
+  left: 24px;
+}
+
+.connectorLineRight {
+  right: 24px;
+  left: auto;
+}
+
+/* Curved SVG connector */
+.connectorSvg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
 /* ===== Theme support ===== */
 :global([data-theme="light"]) .container {
   --timeline-line-color: rgba(0, 0, 0, 0.15);
@@ -169,10 +231,6 @@
 
 /* ===== Responsive ===== */
 @media (max-width: 768px) {
-  .line {
-    left: 16px;
-  }
-
   .sectionNodeColumn {
     min-width: 34px;
   }
@@ -186,6 +244,27 @@
     padding-left: 34px;
   }
 
+  .sectionRight .sectionScroll {
+    padding-left: 1rem;
+    padding-right: 34px;
+  }
+
+  .sectionLineLeft {
+    left: 16px;
+  }
+
+  .sectionLineRight {
+    right: 16px;
+  }
+
+  .connectorLineLeft {
+    left: 16px;
+  }
+
+  .connectorLineRight {
+    right: 16px;
+  }
+
   .sectionTitle {
     font-size: 1.25rem;
   }
@@ -196,16 +275,33 @@
 }
 
 @media (max-width: 480px) {
-  .line {
-    left: 12px;
-  }
-
   .sectionNodeColumn {
     min-width: 26px;
   }
 
   .sectionScroll {
     padding-left: 26px;
+  }
+
+  .sectionRight .sectionScroll {
+    padding-left: 1rem;
+    padding-right: 26px;
+  }
+
+  .sectionLineLeft {
+    left: 12px;
+  }
+
+  .sectionLineRight {
+    right: 12px;
+  }
+
+  .connectorLineLeft {
+    left: 12px;
+  }
+
+  .connectorLineRight {
+    right: 12px;
   }
 
   .sectionTitle {
