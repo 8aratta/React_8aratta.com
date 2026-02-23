@@ -14,6 +14,8 @@ public/
 │   └── images/               # Image files
 │       ├── Me.png           # Hero image
 │       ├── enso.png         # Enso circle background
+│       ├── Home_Light.gif   # Home Page Gif in light mode used in about page (dark mode)
+│       ├── Home_Dark.gif    # Home Page Gif in dark mode used in about page (light mode)
 │       ├── logo.png         # Logo (light theme)
 │       └── logo_white.png   # Logo (dark theme)
 ├── CNAME
@@ -69,8 +71,8 @@ src/
 │   │   └── Home.module.css   # Includes animations & responsive design
 │   └── About/                # About page
 │       ├── index.ts
-│       ├── About.tsx
-│       └── About.module.css
+│       ├── About.tsx         # Timeline-driven About page with theme-aware styling
+│       └── About.module.css  # Card-like content, theme-aware headings, responsive
 ├── types/                     # TypeScript type definitions
 │   └── index.ts              # All type interfaces
 ├── App.tsx                    # Main application component (wrapped with ThemeProvider)

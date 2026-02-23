@@ -143,6 +143,9 @@ Each `TimelineSection` can be `orientation="left"` (default) or `orientation="ri
 
 The `TimelineConnector` between sections of **different** orientations renders an SVG S-curve. Between sections of the **same** orientation it renders a straight vertical line.
 
+### ISSUES:
+Depending on the width available the `TimelineConnector` seems to misalign when switching orientations... calculations are hard man
+
 ## Active Entry Label
 
 The pinned header always shows the format **`Section Title - Entry Title`** based on which entry is currently at the top of the scroll area. This is driven by `useActiveEntry` tracking `scrollTop` inside the section's inner div.
