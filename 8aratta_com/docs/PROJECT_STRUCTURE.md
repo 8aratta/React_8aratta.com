@@ -36,10 +36,22 @@ src/
 │   │   ├── index.ts
 │   │   ├── DebugPanel.tsx
 │   │   └── DebugPanel.module.css
-│   └── GradientBackground/   # Shader gradient component
+│   ├── GradientBackground/   # Shader gradient component
+│   │   ├── index.ts
+│   │   ├── GradientBackground.tsx
+│   │   └── GradientBackground.module.css
+│   │
+│   └── Timeline/             # Reusable timeline component
 │       ├── index.ts
-│       ├── GradientBackground.tsx
-│       └── GradientBackground.module.css
+│       ├── Timeline.tsx              # Container with snap scroll
+│       ├── TimelineSection.tsx       # Parent node (snap checkpoint)
+│       ├── TimelineEntry.tsx         # Child node (content block)
+│       ├── TimelineNode.tsx          # Circle visual
+│       ├── TimelineConnector.tsx     # Straight line / SVG curve between sections
+│       ├── useSnapScroll.ts          # Wheel-based section snapping
+│       ├── useTimelineScroll.ts      # Active entry tracking per section
+│       ├── Timeline.module.css       # All styles + orientation variants
+│       └── types.ts                  # Shared type interfaces
 ├── constants/                 # Application constants
 │   ├── index.ts              # Barrel export
 │   └── gradient.ts           # Gradient configuration (dark/light themes)
@@ -78,7 +90,8 @@ docs/
 │   ├── Navigation.md         # Navigation with clock, logo & theme toggle
 │   ├── ThemeToggle.md        # Responsive theme toggle button
 │   ├── GradientBackground.md # Shader gradient background
-│   └── DebugPanel.md        # Debug overlay component
+│   ├── DebugPanel.md        # Debug overlay component
+│   └── Timeline.md          # Timeline with snap scroll & orientation support
 ├── contexts/                 # Context documentation
 │   └── ThemeContext.md      # Theme state management
 ├── pages/                    # Page documentation
@@ -87,7 +100,9 @@ docs/
 ├── hooks/                    # Custom hooks documentation
 │   ├── TEMPLATE.md          # Template for new hook docs
 │   ├── useMousePosition.md  # Mouse tracking with smooth interpolation
-│   └── useGradientRotation.md # Rotation calculation hook
+│   ├── useGradientRotation.md # Rotation calculation hook
+│   ├── useActiveEntry.md    # Active entry tracking inside a TimelineSection
+│   └── useSnapScroll.md     # Wheel-based snap scrolling between sections
 ├── types/                    # Type definitions documentation
 │   ├── GradientConfig.md    # Gradient configuration types
 │   ├── MousePosition.md     # Mouse position types
