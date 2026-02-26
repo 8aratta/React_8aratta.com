@@ -1,18 +1,10 @@
 import React from 'react';
-import { useMousePosition, useGradientRotation } from '../../hooks';
-import { GradientBackground, Timeline, TimelineSection, TimelineEntry } from '../../components';
-import { DEFAULT_GRADIENT_CONFIG, MOUSE_SMOOTHING } from '../../constants/gradient';
+import {  Timeline, TimelineSection, TimelineEntry } from '../../components';
 import { useTheme } from '../../contexts';
 import styles from './About.module.css';
 
 function About() {
   const { theme } = useTheme();
-  const { mousePos, handleMouseMove, handleMouseLeave } = useMousePosition(MOUSE_SMOOTHING);
-  const rotation = useGradientRotation({
-    mousePos,
-    baseRotation: DEFAULT_GRADIENT_CONFIG.baseRotation,
-  });
-
   const homeGif = theme === 'dark' ? '/assets/images/Home_Light.gif' : '/assets/images/Home_Dark.gif';
 
 
@@ -20,14 +12,8 @@ function About() {
     <div
       className={styles.container}
       data-theme={theme}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
     >
-      <GradientBackground rotation={rotation} />
       <div className={styles.content}>
-        <h2>Welcome to 8aratta</h2>
-        <p>Navigate through my timeline below to get a glimpse of what my website is all about.</p>
-
         <Timeline>
 
           {/* General Section */}
