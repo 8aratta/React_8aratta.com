@@ -1,0 +1,738 @@
+@font-face {
+  font-family: 'Resoft';
+  src: url(../../../public/assets/fonts/Resoft.ttf) format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* ── Base container ── */
+.aboutPage {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background: #0a0a0a;
+  color: #e0e0e0;
+  transition: background 0.6s ease, color 0.6s ease;
+}
+
+.aboutPage[data-theme="light"] {
+  background: #e8e8e8;
+  color: #1a1a1a;
+}
+
+/* ── Scroll sections — shared ── */
+.section {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 6rem 2rem;
+  overflow: hidden;
+}
+
+.sectionInner {
+  max-width: 800px;
+  width: 100%;
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.sectionInner.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Directional variants */
+.fromLeft {
+  transform: translateX(-60px) translateY(0);
+}
+
+.fromLeft.visible {
+  transform: translateX(0) translateY(0);
+}
+
+.fromRight {
+  transform: translateX(60px) translateY(0);
+}
+
+.fromRight.visible {
+  transform: translateX(0) translateY(0);
+}
+
+/* ══════════════════════════════════
+   Section 1 — HERO
+   ══════════════════════════════════ */
+.heroSection {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.heroBackground {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.heroBgGradient {
+  position: absolute;
+  inset: -20%;
+  background: radial-gradient(ellipse at 50% 50%, #1a1a1a 0%, #0a0a0a 70%);
+  transition: background 0.6s ease;
+}
+
+.aboutPage[data-theme="light"] .heroBgGradient {
+  background: radial-gradient(ellipse at 50% 50%, #dddddd 0%, #e8e8e8 70%);
+}
+
+.heroEnso {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 55vmin;
+  height: 55vmin;
+  transform: translate(-50%, -50%);
+  opacity: 0.08;
+  animation: ensoSpin 60s linear infinite;
+  pointer-events: none;
+  user-select: none;
+}
+
+@keyframes ensoSpin {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+.aboutPage[data-theme="light"] .heroEnso {
+  opacity: 0.06;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  opacity: 0;
+  animation: heroReveal 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.2s forwards;
+}
+
+@keyframes heroReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(40px) scale(0.96);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.heroLogo {
+  width: 120px;
+  height: auto;
+  margin-bottom: 2rem;
+  opacity: 0;
+  animation: logoFloat 1.8s cubic-bezier(0.22, 1, 0.36, 1) 0.4s forwards;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+@keyframes logoFloat {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  100% {
+    opacity: 0.8;
+    transform: translateY(0);
+  }
+}
+
+.heroTitle {
+  font-family: 'Resoft', sans-serif;
+  font-size: clamp(3.5rem, 8vw, 7rem);
+  line-height: 1;
+  margin: 0;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  mix-blend-mode: difference;
+}
+
+.aboutPage[data-theme="light"] .heroTitle {
+  color: #1a1a1a;
+  mix-blend-mode: normal;
+}
+
+.heroTitleAccent {
+  color: #888888;
+  mix-blend-mode: normal;
+}
+
+.aboutPage[data-theme="light"] .heroTitleAccent {
+  color: #8f8f8f;
+}
+
+.heroSubtitle {
+  font-family: 'Resoft', sans-serif;
+  font-size: clamp(0.9rem, 1.5vw, 1.2rem);
+  font-weight: 300;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #ffffff60;
+  margin-top: 1.5rem;
+  opacity: 0;
+  animation: heroReveal 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.8s forwards;
+}
+
+.aboutPage[data-theme="light"] .heroSubtitle {
+  color: #1a1a1a80;
+}
+
+.scrollIndicator {
+  position: absolute;
+  bottom: 3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  opacity: 0;
+  animation: heroReveal 1.4s cubic-bezier(0.22, 1, 0.36, 1) 1.4s forwards;
+}
+
+.scrollLine {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, #888888, transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+
+@keyframes scrollPulse {
+
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scaleY(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scaleY(1.3);
+  }
+}
+
+.scrollLabel {
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #88888880;
+}
+
+.aboutPage[data-theme="light"] .scrollLine {
+  background: linear-gradient(to bottom, #8f8f8f, transparent);
+}
+
+.aboutPage[data-theme="light"] .scrollLabel {
+  color: #8f8f8f80;
+}
+
+/* ══════════════════════════════════
+   Section 2 — DESCRIPTION
+   ══════════════════════════════════ */
+.descriptionSection {
+  background: transparent;
+}
+
+.descriptionSection .sectionInner {
+  transition-delay: 0.1s;
+}
+
+.descriptionLabel {
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #888888;
+  margin-bottom: 2rem;
+  font-weight: 500;
+}
+
+.aboutPage[data-theme="light"] .descriptionLabel {
+  color: #8f8f8f;
+}
+
+.descriptionText {
+  font-size: clamp(1.15rem, 2vw, 1.5rem);
+  line-height: 1.8;
+  font-weight: 300;
+  color: #b0b0b0;
+  max-width: 650px;
+}
+
+.aboutPage[data-theme="light"] .descriptionText {
+  color: #3a3a3a;
+}
+
+.descriptionHighlight {
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.aboutPage[data-theme="light"] .descriptionHighlight {
+  color: #000000;
+}
+
+/* ══════════════════════════════════
+   Section 3 — PURPOSE
+   ══════════════════════════════════ */
+.purposeSection {
+  background: transparent;
+}
+
+.purposeBorder {
+  position: relative;
+  padding: 3rem;
+  border: 1px solid #ffffff10;
+  transition: border-color 0.6s ease;
+}
+
+.aboutPage[data-theme="light"] .purposeBorder {
+  border-color: #00000010;
+}
+
+.purposeBorder::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  width: 40%;
+  height: 35%;
+  border-top: 2px solid #88888850;
+  border-left: 2px solid #88888850;
+  transition: border-color 0.4s ease;
+}
+
+.purposeBorder::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  right: -1px;
+  width: 40%;
+  height: 35%;
+  border-bottom: 2px solid #88888850;
+  border-right: 2px solid #88888850;
+  transition: border-color 0.4s ease;
+}
+
+.visible .purposeBorder::before,
+.visible .purposeBorder::after {
+  border-color: #888888;
+  transition-delay: 0.5s;
+}
+
+.purposeTitle {
+  font-family: 'Resoft', sans-serif;
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  margin: 0 0 1.5rem;
+  color: #ffffff;
+  mix-blend-mode: difference;
+}
+
+.aboutPage[data-theme="light"] .purposeTitle {
+  color: #1a1a1a;
+  mix-blend-mode: normal;
+}
+
+.purposeText {
+  font-size: clamp(1rem, 1.5vw, 1.15rem);
+  line-height: 1.9;
+  font-weight: 300;
+  color: #999;
+}
+
+.aboutPage[data-theme="light"] .purposeText {
+  color: #555;
+}
+
+.purposeEm {
+  font-style: italic;
+  color: #ffffff;
+}
+
+.aboutPage[data-theme="light"] .purposeEm {
+  color: #000000;
+}
+
+/* ══════════════════════════════════
+   Section 4 — IDENTITY (Name origin)
+   ══════════════════════════════════ */
+.identitySection {
+  background: transparent;
+}
+
+.identityContent {
+  text-align: center;
+}
+
+.nameTransform {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 3rem;
+  flex-wrap: wrap;
+}
+
+.nameOriginal,
+.nameNew {
+  font-family: 'Resoft', sans-serif;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 400;
+  line-height: 1;
+}
+
+.nameOriginal {
+  color: #555;
+  position: relative;
+}
+
+.aboutPage[data-theme="light"] .nameOriginal {
+  color: #aaa;
+}
+
+.nameArrow {
+  font-size: 1.5rem;
+  color: #888888;
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: opacity 0.6s ease 0.5s, transform 0.6s ease 0.5s;
+}
+
+.aboutPage[data-theme="light"] .nameArrow {
+  color: #8f8f8f;
+}
+
+.visible .nameArrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.nameNew {
+  color: #ffffff;
+  position: relative;
+}
+
+.aboutPage[data-theme="light"] .nameNew {
+  color: #000000;
+}
+
+.nameNew .nameEight {
+  display: inline-block;
+  opacity: 0;
+  transform: rotateY(90deg);
+  transition: opacity 0.6s ease 0.7s, transform 0.6s ease 0.7s;
+}
+
+.visible .nameNew .nameEight {
+  opacity: 1;
+  transform: rotateY(0);
+}
+
+.identityText {
+  font-size: clamp(1rem, 1.5vw, 1.15rem);
+  line-height: 1.9;
+  font-weight: 300;
+  color: #999;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.aboutPage[data-theme="light"] .identityText {
+  color: #555;
+}
+
+/* ══════════════════════════════════
+   Section 5 — WHY EIGHT
+   ══════════════════════════════════ */
+.whySection {
+  background: transparent;
+  padding-bottom: 10rem;
+}
+
+.whyTitle {
+  font-family: 'Resoft', sans-serif;
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  margin: 0 0 2rem;
+  color: #ffffff;
+  mix-blend-mode: difference;
+  text-align: center;
+}
+
+.aboutPage[data-theme="light"] .whyTitle {
+  color: #1a1a1a;
+  mix-blend-mode: normal;
+}
+
+.whyText {
+  font-size: clamp(1rem, 1.5vw, 1.15rem);
+  line-height: 1.9;
+  font-weight: 300;
+  color: #999;
+  max-width: 600px;
+  margin: 0 auto 2rem;
+  text-align: center;
+}
+
+.aboutPage[data-theme="light"] .whyText {
+  color: #555;
+}
+
+.coincidences {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 3rem 0;
+}
+
+.coincidenceCard {
+  position: relative;
+  padding: 2rem;
+  border: 1px solid #ffffff0a;
+  background: #ffffff05;
+  border-radius: 2px;
+  max-width: 240px;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease, border-color 0.3s ease;
+}
+
+.visible .coincidenceCard {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.visible .coincidenceCard:nth-child(1) {
+  transition-delay: 0.3s;
+}
+
+.visible .coincidenceCard:nth-child(2) {
+  transition-delay: 0.5s;
+}
+
+.aboutPage[data-theme="light"] .coincidenceCard {
+  border-color: #0000000a;
+  background: #0000000a;
+}
+
+.coincidenceCard:hover {
+  border-color: #88888860;
+}
+
+.coincidenceNumber {
+  font-family: 'Resoft', sans-serif;
+  font-size: 2.5rem;
+  color: #888888;
+  line-height: 1;
+  margin-bottom: 0.75rem;
+}
+
+.aboutPage[data-theme="light"] .coincidenceNumber {
+  color: #8f8f8f;
+}
+
+.coincidenceLabel {
+  font-size: 0.85rem;
+  color: #777;
+  line-height: 1.5;
+}
+
+.aboutPage[data-theme="light"] .coincidenceLabel {
+  color: #888;
+}
+
+.whyClosing {
+  font-size: clamp(1rem, 1.5vw, 1.15rem);
+  line-height: 1.9;
+  font-weight: 300;
+  color: #999;
+  max-width: 600px;
+  margin: 2rem auto 0;
+  text-align: center;
+  font-style: italic;
+}
+
+.aboutPage[data-theme="light"] .whyClosing {
+  color: #555;
+}
+
+.whyClosingAccent {
+  color: #ffffff;
+  font-style: normal;
+  font-weight: 500;
+}
+
+.aboutPage[data-theme="light"] .whyClosingAccent {
+  color: #000000;
+}
+
+/* ══════════════════════════════════
+   Reduced motion
+   ══════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+
+  .sectionInner,
+  .fromLeft,
+  .fromRight,
+  .nameArrow,
+  .nameNew .nameEight,
+  .coincidenceCard {
+    transition: none !important;
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .heroContent,
+  .heroLogo,
+  .heroSubtitle,
+  .scrollIndicator {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .heroEnso {
+    animation: none !important;
+  }
+
+  .scrollLine {
+    animation: none !important;
+  }
+}
+
+/* ══════════════════════════════════
+   Responsive — Tablet
+   ══════════════════════════════════ */
+@media (max-width: 1024px) {
+  .section {
+    padding: 5rem 1.5rem;
+  }
+
+  .purposeBorder {
+    padding: 2.5rem;
+  }
+
+  .coincidences {
+    gap: 1.5rem;
+  }
+}
+
+/* ══════════════════════════════════
+   Responsive — Mobile
+   ══════════════════════════════════ */
+@media (max-width: 768px) {
+  .section {
+    padding: 4rem 1.25rem;
+    min-height: 80vh;
+  }
+
+  .heroSection {
+    min-height: 100vh;
+  }
+
+  .heroLogo {
+    width: 80px;
+  }
+
+  .purposeBorder {
+    padding: 2rem 1.5rem;
+  }
+
+  .purposeBorder::before,
+  .purposeBorder::after {
+    width: 30%;
+    height: 25%;
+  }
+
+  .nameTransform {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .nameArrow {
+    transform: rotate(90deg) translateX(-10px);
+  }
+
+  .visible .nameArrow {
+    transform: rotate(90deg) translateX(0);
+  }
+
+  .coincidences {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .coincidenceCard {
+    max-width: 280px;
+    width: 100%;
+  }
+
+  .whySection {
+    padding-bottom: 6rem;
+  }
+}
+
+/* ══════════════════════════════════
+   Responsive — Small mobile
+   ══════════════════════════════════ */
+@media (max-width: 480px) {
+  .section {
+    padding: 3rem 1rem;
+    min-height: 70vh;
+  }
+
+  .heroSection {
+    min-height: 100vh;
+  }
+
+  .heroLogo {
+    width: 60px;
+    margin-bottom: 1.5rem;
+  }
+
+  .heroSubtitle {
+    letter-spacing: 0.15em;
+    font-size: 0.75rem;
+  }
+
+  .scrollIndicator {
+    bottom: 2rem;
+  }
+
+  .purposeBorder {
+    padding: 1.5rem 1rem;
+  }
+
+  .nameOriginal,
+  .nameNew {
+    font-size: clamp(2rem, 12vw, 3rem);
+  }
+
+  .coincidenceCard {
+    padding: 1.5rem;
+  }
+}
