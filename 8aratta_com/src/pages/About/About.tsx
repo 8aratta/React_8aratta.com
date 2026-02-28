@@ -4,8 +4,12 @@ import styles from './About.module.css';
 
 /**
  * Custom hook: applies a `.visible` class when the element scrolls into view.
+ * Uses the snap-scroll container as the IntersectionObserver root.
  */
-function useScrollReveal(threshold = 0.15) {
+function useScrollReveal(
+  scrollRoot: React.RefObject<HTMLDivElement | null>,
+  threshold = 0.15
+) {
   const ref = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -20,12 +24,12 @@ function useScrollReveal(threshold = 0.15) {
           observer.unobserve(el); // reveal once only
         }
       },
-      { threshold }
+      { threshold, root: scrollRoot.current }
     );
 
     observer.observe(el);
     return () => observer.disconnect();
-  }, [threshold]);
+  }, [threshold, scrollRoot]);
 
   return { ref, isVisible };
 }
@@ -34,33 +38,39 @@ function About() {
   const { theme } = useTheme();
   const logo = theme === 'dark' ? '/assets/images/logo_white.png' : '/assets/images/logo.png';
 
+  // Ref for the snap-scroll container
+  const containerRef = useRef<HTMLDivElement>(null);
+
   // Parallax offset for hero background
   const heroRef = useRef<HTMLDivElement>(null);
   const [parallaxY, setParallaxY] = useState(0);
 
   const handleScroll = useCallback(() => {
-    if (heroRef.current) {
+    const container = containerRef.current;
+    if (heroRef.current && container) {
       const rect = heroRef.current.getBoundingClientRect();
       // Only apply when hero is still partially in view
       if (rect.bottom > 0) {
-        setParallaxY(window.scrollY * 0.3);
+        setParallaxY(container.scrollTop * 0.3);
       }
     }
   }, []);
 
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    const container = containerRef.current;
+    if (!container) return;
+    container.addEventListener('scroll', handleScroll, { passive: true });
+    return () => container.removeEventListener('scroll', handleScroll);
   }, [handleScroll]);
 
   // Scroll-reveal for each narrative section
-  const description = useScrollReveal(0.15);
-  const purpose = useScrollReveal(0.15);
-  const identity = useScrollReveal(0.15);
-  const whyEight = useScrollReveal(0.15);
+  const description = useScrollReveal(containerRef, 0.15);
+  const purpose = useScrollReveal(containerRef, 0.15);
+  const identity = useScrollReveal(containerRef, 0.15);
+  const whyEight = useScrollReveal(containerRef, 0.15);
 
   return (
-    <div className={styles.aboutPage} data-theme={theme}>
+    <div className={styles.aboutPage} data-theme={theme} ref={containerRef}>
 
       {/* ─── Section 1: Hero ─── */}
       <section className={`${styles.section} ${styles.heroSection}`} ref={heroRef}>

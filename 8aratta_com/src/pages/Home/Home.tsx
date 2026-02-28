@@ -34,7 +34,6 @@ function Home() {
         </h1>
 
         <h2 className={styles.heroDescription}>
-          <span>Web Designer</span>
           <span>Developer</span>
         </h2>
       </div>
