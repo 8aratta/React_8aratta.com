@@ -2,6 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './Navigation.module.css';
 import { useTheme } from '../../contexts';
+import { CircularMenu } from '../CircularMenu';
+
+const NAV_LINKS = [
+  { to: '/', label: 'Home' },
+  { to: '/about', label: 'About' },
+  { to: '/workspace', label: 'Workspace' },
+];
 
 function Navigation() {
   const [time, setTime] = useState(new Date());
@@ -23,7 +30,10 @@ function Navigation() {
     });
   };
 
-  const logo = theme === 'dark' ? '/assets/images/logo_white.png' : '/assets/images/logo.png';
+  const logo =
+    theme === 'dark'
+      ? '/assets/images/logo_white.png'
+      : '/assets/images/logo.png';
 
   return (
     <nav className={styles.nav} data-theme={theme}>
@@ -33,11 +43,7 @@ function Navigation() {
         </Link>
         <span className={styles.clock}>{formatTime(time)}</span>
       </div>
-      <div className={styles.links}>
-        <Link to="/" className={styles.link}>Home</Link>
-        <Link to="/about" className={styles.link}>About</Link>
-        <Link to="/workspace" className={styles.link}>Workspace</Link>
-      </div>
+      <CircularMenu links={NAV_LINKS} />
     </nav>
   );
 }
