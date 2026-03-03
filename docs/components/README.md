@@ -16,7 +16,8 @@ No hunting through folders. You're welcome.
 
 | Component | What It Does | Used In |
 |-----------|-------------|---------|
-| **[Navigation](./Navigation.md)** | Top nav bar with logo, links, and a live clock | Every page (via App) |
+| **[Navigation](./Navigation.md)** | Top nav bar with logo, clock, and CircularMenu | Every page (via App) |
+| **[CircularMenu](./CircularMenu.md)** | Radial nav menu with liquid glass effect | Inside Navigation |
 | **[ThemeToggle](./ThemeToggle.md)** | Dark/Light mode toggle button | Every page (via App) |
 | **[GradientBackground](./GradientBackground.md)** | Animated shader gradient that reacts to your mouse | Home page |
 | **[ModelViewer](./ModelViewer.md)** | 3D GLB model renderer with orbit controls | Workspace page |

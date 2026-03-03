@@ -8,7 +8,7 @@ The Navigation component is the top bar you see on every page. It's always there
 
 - Shows the **8aratta logo** (swaps between dark and light versions depending on the theme — fancy, right?)
 - Displays a **live clock** that updates every second. Because knowing it's 3:47 AM while you're still coding is important life information.
-- Provides **navigation links** to all the pages: Home, About, and Workspace.
+- Houses the **[CircularMenu](./CircularMenu.md)** — a radial navigation menu that fans out from a hamburger button with a liquid glass effect. Because plain link lists are so 2019.
 
 ---
 
@@ -27,7 +27,15 @@ src/components/Navigation/
 
 1. The component grabs the current theme via `useTheme()` to decide which logo to show.
 2. A `setInterval` ticks every second to update the displayed time — formatted in a nice `h:mm AM/PM` style.
-3. Navigation links use React Router's `<Link>` component, so page transitions are smooth and don't reload the entire app.
+3. Navigation links are defined as a `NAV_LINKS` array and handed off to the `CircularMenu` component, which handles the radial layout, animations, and interactions.
+
+```tsx
+const NAV_LINKS = [
+  { to: '/', label: 'Home' },
+  { to: '/about', label: 'About' },
+  { to: '/workspace', label: 'Workspace' },
+];
+```
 
 ---
 
@@ -35,12 +43,12 @@ src/components/Navigation/
 
 ```
 ┌──────────────────────────────────────────────────┐
-│  [Logo]  3:47 PM               Home  About  Work │
-│  ← left section →              ← right links →   │
+│  [Logo]  3:47 PM                            [☰]  │
+│  ← left section →              ← hamburger btn →│
 └──────────────────────────────────────────────────┘
 ```
 
-The left side has the logo (which links back to Home) and the clock. The right side has the page links.
+The left side has the logo (which links back to Home) and the clock. The right side has the CircularMenu hamburger button that, when clicked, fans out the nav links in a radial arc.
 
 ---
 
@@ -49,6 +57,12 @@ The left side has the logo (which links back to Home) and the clock. The right s
 The nav applies a `data-theme` attribute based on the current theme. This lets CSS styles adapt:
 - **Dark mode** → white logo, dark-friendly colors
 - **Light mode** → dark logo, light-friendly colors
+
+---
+
+## Related
+
+- **[CircularMenu](./CircularMenu.md)** — the radial menu component that lives inside Navigation
 
 ---
 
