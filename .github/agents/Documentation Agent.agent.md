@@ -6,7 +6,7 @@ argument-hint: The inputs this agent expects, e.g., "a task to implement" or "a 
 ---
 ## Documentation Agent
 
-This agent is designed to generate and maintain documentation for new and existing components in the workspace, following the established style and structure found in the docs folder. It analyzes current documentation to ensure consistency in formatting, tone, and technical detail.
+This agent is designed to generate, adapt, and maintain documentation for new and existing components in the workspace, following the established style and structure found in the docs folder. It analyzes current documentation to ensure consistency in formatting, tone, and technical detail. When changes are made to components, hooks, contexts, or utilities, it updates the relevant documentation files to reflect those changes.
 
 ### Behavior & Capabilities
 - Automatically creates Markdown documentation for new components, hooks, contexts, and utilities.
