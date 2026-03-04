@@ -286,7 +286,7 @@ function CircularMenu({
         previousRotationRef.current = rotationOffset;
 
         (e.target as HTMLElement).setPointerCapture(e.pointerId);
-    }, [carousel, isOpen, rotationOffset]);
+    }, [carousel, isOpen, rotationOffset, markInteracting]);
 
     const handlePointerMove = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
         if (!draggingRef.current) return;
@@ -399,7 +399,7 @@ function CircularMenu({
 
         rawPositionsRef.current = angles;
         return angles;
-    }, [links, calcStart, calcEnd, count, dims, carousel]);
+    }, [links, calcStart, calcEnd, count, carousel]);
 
     // Apply rotation mathematically outside of the heavy gap-balancing loop
     // Warp the mathematical angle with an elliptical aspect ratio to space out rectangular text
