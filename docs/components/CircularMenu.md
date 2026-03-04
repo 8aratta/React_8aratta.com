@@ -23,9 +23,26 @@ Now with **carousel mode** — drag or scroll to spin the whole ring of links ar
 
 ```
 src/components/CircularMenu/
-├── CircularMenu.tsx
-├── CircularMenu.module.css
-└── index.ts
+├── index.ts                        ← public API (re-exports component + types)
+├── CircularMenu.tsx                ← lean orchestrator (JSX, ~130 lines)
+├── types.ts                        ← NavLink, CircularMenuProps, PositionEntry
+│
+├── utils/
+│   ├── mathUtils.ts               ← toRad, getRadialPosition, angle resolvers, warp, scale
+│   └── liquidGlass.ts             ← calculateRefractionProfile, generateDisplacementMap, buildLiquidGlassFilter
+│
+├── hooks/
+│   ├── useMenuState.ts            ← open/close state + route-change reset
+│   ├── useCarouselInteraction.ts  ← drag, wheel, snap, rotationOffset
+│   └── useLiquidGlass.ts          ← lazy SVG filter injection
+│
+├── components/
+│   └── MenuItem.tsx               ← single radial link pill (<Link> + CSS custom props)
+│
+└── styles/
+    ├── base.module.css            ← .circularMenu, .menuOverlay, .carouselOverlay
+    ├── button.module.css          ← .menuButton, .menuIcon, hamburger → X morph
+    └── menuItem.module.css        ← .menuItem, glass layers, open/interacting/snapping
 ```
 
 ---
@@ -89,6 +106,7 @@ The `angle` prop is a shorthand: set `angle="bottom"` and you get a 270°±45° 
 | `snap` | `boolean` | `false` | Snap the nearest item to the emphasis angle when interaction stops |
 | `emphasisScale` | `number` | — | Max scale factor at the emphasis angle (e.g. `1.33`) |
 | `neutralScale` | `number` | — | Scale factor at the opposite side (e.g. `0.33`) — enables continuous interpolation |
+| `carryMomentum` | `boolean` | `false` | Apply drag-speed-based inertia on release — slow drags snap quickly, fast drags spin like a fortune wheel and coast to a stop |
 
 ### NavLink Type
 

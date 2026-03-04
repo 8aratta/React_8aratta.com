@@ -1,0 +1,66 @@
+/* ─── Hamburger Button ─── */
+.menuButton {
+    position: fixed;
+    top: 1.5rem;
+    right: 2rem;
+    z-index: 120;
+    width: 44px;
+    height: 44px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    mix-blend-mode: difference;
+}
+
+.menuIcon {
+    width: 24px;
+    height: 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+}
+
+.menuIcon span {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: #fff;
+    border-radius: 2px;
+    transition:
+        transform 0.3s cubic-bezier(0.65, 0, 0.35, 1),
+        opacity 0.2s ease;
+    transform-origin: center;
+}
+
+[data-theme="light"] .menuIcon span {
+    background: #000;
+}
+
+/* Hamburger → X morph */
+.menuIcon.open span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+}
+
+.menuIcon.open span:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+}
+
+.menuIcon.open span:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+}
+
+/* ─── Mobile ─── */
+@media (max-width: 768px) {
+    .menuButton {
+        top: 1rem;
+        right: 1rem;
+        width: 40px;
+        height: 40px;
+    }
+}
