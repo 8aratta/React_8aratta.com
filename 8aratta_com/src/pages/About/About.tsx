@@ -114,11 +114,35 @@ function About() {
           className={`${styles.sectionInner} ${styles.fromLeft} ${description.isVisible ? styles.visible : ''}`}
         >
           <p className={styles.descriptionLabel}>What is 8aratta</p>
-          <p className={styles.descriptionText}>
-            <span className={styles.descriptionHighlight}>8aratta</span> is a personal label — an
-            unofficial brand representing my work, projects, and online presence. It reflects my
-            identity and serves as a way to share my passions and creations with the world.
-          </p>
+
+          <div className={styles.descriptionLayout}>
+            <div className={styles.descriptionLogoWrap}>
+              <img
+                src={logo}
+                alt="8aratta logo — the kanji 八 (hachi, meaning eight)"
+                className={styles.descriptionLogo}
+                draggable={false}
+              />
+              <span className={styles.descriptionKanji}>八</span>
+              <span className={styles.descriptionKanjiLabel}>hachi · eight</span>
+            </div>
+
+            <div className={styles.descriptionBody}>
+              <p className={styles.descriptionText}>
+                <span className={styles.descriptionHighlight}>8aratta</span> is a personal label — an
+                unofficial brand representing my work, projects, and online presence. It reflects my
+                identity and serves as a way to share my passions and creations with the world.
+              </p>
+              <p className={styles.descriptionText}>
+                The logo is the{' '}
+                <span className={styles.descriptionHighlight}>kanji 八</span> — the Japanese
+                character for the number eight, read as{' '}
+                <span className={styles.descriptionHighlight}>hachi</span>. Japan holds a special
+                place in my life; I travel there often and carry a deep connection to its culture,
+                aesthetics, and way of life.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 

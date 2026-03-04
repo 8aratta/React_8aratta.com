@@ -301,6 +301,103 @@
   color: #000000;
 }
 
+/* ── Description: two-column layout ── */
+.descriptionLayout {
+  display: flex;
+  align-items: center;
+  gap: 3.5rem;
+  margin-top: 1rem;
+}
+
+.descriptionLogoWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  flex-shrink: 0;
+}
+
+.descriptionLogo {
+  width: 96px;
+  height: auto;
+  opacity: 0;
+  transform: scale(0.72) translateY(14px);
+  filter: blur(8px);
+  transition:
+    opacity 1s cubic-bezier(0.22, 1, 0.36, 1) 0.35s,
+    transform 1s cubic-bezier(0.22, 1, 0.36, 1) 0.35s,
+    filter 0.8s ease 0.35s;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.visible .descriptionLogo {
+  opacity: 0.88;
+  transform: scale(1) translateY(0);
+  filter: blur(0);
+}
+
+.aboutPage[data-theme="light"] .descriptionLogo {
+  filter: blur(8px) brightness(0.1);
+}
+
+.aboutPage[data-theme="light"] .visible .descriptionLogo {
+  filter: blur(0) brightness(0.1);
+}
+
+.descriptionKanji {
+  font-size: 1.4rem;
+  color: #888888;
+  letter-spacing: 0.05em;
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity 0.7s ease 0.9s,
+    transform 0.7s ease 0.9s;
+}
+
+.visible .descriptionKanji {
+  opacity: 0.55;
+  transform: translateY(0);
+}
+
+.descriptionKanjiLabel {
+  font-size: 0.6rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #888888;
+  opacity: 0;
+  transition: opacity 0.7s ease 1.1s;
+}
+
+.visible .descriptionKanjiLabel {
+  opacity: 0.75;
+}
+
+.aboutPage[data-theme="light"] .descriptionKanjiLabel {
+  color: #8f8f8f;
+}
+
+.descriptionBody {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+@media (max-width: 640px) {
+  .descriptionLayout {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .descriptionLogoWrap {
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+  }
+}
+
 /* ══════════════════════════════════
    Section 3 — PURPOSE
    ══════════════════════════════════ */
