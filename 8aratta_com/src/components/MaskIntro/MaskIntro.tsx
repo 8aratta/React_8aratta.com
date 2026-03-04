@@ -12,9 +12,6 @@ import * as THREE from 'three';
 
 /* ── Config ──────────────────────────────────────────────── */
 
-/** Small PNG mask: opaque pixels = solid wall, transparent pixels = hole */
-const MASK_PNG = `${process.env.PUBLIC_URL}/assets/images/logo.png`;
-
 /** Distance from origin to camera along Z */
 const CAMERA_Z = 30;
 /** Milliseconds to wait before the fly-through starts */
@@ -23,8 +20,6 @@ const ANIMATION_DELAY_MS = 1200;
 const ANIMATION_DURATION = 1.8;
 /** Total Z-distance the plane travels (must exceed CAMERA_Z) */
 const TRAVEL_DISTANCE = 38;
-/** How small the logo hole appears (lower = smaller hole). 1.0 = fills plane */
-const LOGO_SCALE = 0.3;
 
 /* ── Shader: texture-based mask with complex hole shape ──── */
 
