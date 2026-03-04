@@ -370,21 +370,7 @@ function CircularMenu({
     }, []);
 
     // Pre-compute positions for each link
-    const [dims, setDims] = useState<{ w: number; h: number }[]>([]);
     const rawPositionsRef = useRef<number[]>([]);
-
-    useEffect(() => {
-        if (!isOpen) return;
-        // Small delay to ensure the DOM has rendered the buttons before measuring
-        const timer = setTimeout(() => {
-            if (menuRef.current) {
-                const elements = Array.from(menuRef.current.children) as HTMLElement[];
-                const newDims = elements.map(el => ({ w: el.offsetWidth, h: el.offsetHeight }));
-                setDims(newDims);
-            }
-        }, 10);
-        return () => clearTimeout(timer);
-    }, [isOpen, links]);
 
     const positions = useMemo(() => {
         const actualEndAngle = carousel ? calcStart + 360 : calcEnd;
