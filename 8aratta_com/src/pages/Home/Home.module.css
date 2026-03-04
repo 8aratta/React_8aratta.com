@@ -75,10 +75,14 @@
   mix-blend-mode: multiply;
   transform: translate(-50%, -50%) rotate(360deg);
   pointer-events: none;
+  animation: none;
+}
+
+.container[data-animate="true"] .ensoBackground {
   animation: slideInAndRotate 5s ease-out forwards;
 }
 
-.heroImageContainer:hover .ensoBackground {
+.container[data-animate="true"] .heroImageContainer:hover .ensoBackground {
   animation: slideInAndRotate 5s ease-out forwards, continuousRotate 10s linear infinite;
 }
 
@@ -96,9 +100,13 @@
   position: relative;
   max-height: 90vh;
   display: block;
-  animation: slideInFromLeft 1.5s ease-out;
+  animation: none;
   transition: transform 0.6s ease-out;
   -webkit-user-drag: none;
+}
+
+.container[data-animate="true"] .heroImage {
+  animation: slideInFromLeft 1.5s ease-out;
 }
 
 .heroImageContainer:hover .heroImage {
@@ -120,6 +128,11 @@
   color: #ffffff90;
   mix-blend-mode: difference;
   margin: 0;
+  animation: none;
+  opacity: 0;
+}
+
+.container[data-animate="true"] .heroName {
   animation: fadeInUp 1.5s ease-out 0.3s both;
 }
 
@@ -138,6 +151,11 @@
   font-weight: 300;
   margin: 0.5rem 0 0 0;
   padding: 1rem;
+  animation: none;
+  opacity: 0;
+}
+
+.container[data-animate="true"] .heroDescription {
   animation: fadeInUp 1.5s ease-out 0.6s both;
 }
 
