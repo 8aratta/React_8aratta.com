@@ -184,10 +184,22 @@ function CircularMenu({
                 aria-label={isOpen ? 'Close menu' : 'Open menu'}
                 aria-expanded={isOpen}
             >
-                <div className={`${buttonStyles.menuIcon} ${isOpen ? buttonStyles.open : ''}`}>
-                    <span />
-                    <span />
-                    <span />
+                {/* Wrapper is a normal flex-item so the button's align/justify centers it */}
+                <div className={buttonStyles.iconWrapper}>
+                    <img
+                        src={theme === 'dark'
+                            ? '/assets/images/menu_white(san).png'
+                            : '/assets/images/menu(san).png'}
+                        alt=""
+                        className={`${buttonStyles.menuIcon} ${isOpen ? buttonStyles.hidden : buttonStyles.visible}`}
+                    />
+                    <img
+                        src={theme === 'dark'
+                            ? '/assets/images/menu_white(batsu).png'
+                            : '/assets/images/menu(batsu).png'}
+                        alt=""
+                        className={`${buttonStyles.menuIcon} ${isOpen ? buttonStyles.visible : buttonStyles.hidden}`}
+                    />
                 </div>
             </button>
         </div>

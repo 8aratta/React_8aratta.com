@@ -61,7 +61,7 @@ function Navigation() {
         emphasize={isMobile ? 225 : false}
         emphasisScale={isMobile ? 1.35 : undefined}
         neutralScale={isMobile ? 0.33 : undefined}
-        angle={isMobile ? 'bottom' : undefined} // With three links open up to bottom because emphasis would be on 225 then... idk maybe angle should define start point instead of direction
+        angle={isMobile ? 'bottom' : 220} // With three links open up to bottom because emphasis would be on 225 then... idk maybe angle should define start point instead of direction
         carryMomentum
         introSpin
       />
