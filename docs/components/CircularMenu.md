@@ -33,7 +33,7 @@ src/components/CircularMenu/
 │
 ├── hooks/
 │   ├── useMenuState.ts            ← open/close state + route-change reset
-│   ├── useCarouselInteraction.ts  ← drag, wheel, snap, rotationOffset
+│   ├── useCarouselInteraction.ts  ← drag, wheel, snap, inertia, idle hint
 │   └── useLiquidGlass.ts          ← lazy SVG filter injection
 │
 ├── components/
@@ -42,7 +42,8 @@ src/components/CircularMenu/
 └── styles/
     ├── base.module.css            ← .circularMenu, .menuOverlay, .carouselOverlay
     ├── button.module.css          ← .menuButton, .menuIcon, hamburger → X morph
-    └── menuItem.module.css        ← .menuItem, glass layers, open/interacting/snapping
+    ├── menuItem.module.css        ← .menuItem, glass layers, open/interacting/snapping
+    └── animations.module.css      ← @keyframes idleTwitch + .idleTwitch class
 ```
 
 ---
@@ -107,6 +108,8 @@ The `angle` prop is a shorthand: set `angle="bottom"` and you get a 270°±45° 
 | `emphasisScale` | `number` | — | Max scale factor at the emphasis angle (e.g. `1.33`) |
 | `neutralScale` | `number` | — | Scale factor at the opposite side (e.g. `0.33`) — enables continuous interpolation |
 | `carryMomentum` | `boolean` | `false` | Apply drag-speed-based inertia on release — slow drags snap quickly, fast drags spin like a fortune wheel and coast to a stop |
+| `introSpin` | `boolean` | `false` | Plays a flourish spin when the menu opens to demonstrate the carousel interaction |
+| `idleHint` | *built-in* | — | The emphasized item auto-twitches after 4 s of inactivity to invite dragging (no prop needed, enabled automatically when `emphasize` is set) |
 
 ### NavLink Type
 

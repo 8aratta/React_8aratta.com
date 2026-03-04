@@ -31,6 +31,7 @@ function CircularMenu({
     emphasisScale,
     neutralScale,
     carryMomentum = false,
+    introSpin = false,
 }: CircularMenuProps) {
     const { theme } = useTheme();
     const count = links.length;
@@ -60,6 +61,7 @@ function CircularMenu({
         rotationOffset,
         isInteracting,
         isSnapping,
+        isIdle,
         handlePointerDown,
         handlePointerMove,
         handlePointerUp,
@@ -70,6 +72,7 @@ function CircularMenu({
         isOpen,
         snap,
         carryMomentum,
+        introSpin,
         emphasisTargetAngle,
         rawPositionsRef,
         menuRef,
@@ -84,13 +87,27 @@ function CircularMenu({
         [count, calcStart, calcEnd, carousel]
     );
 
-    // Keep rawPositionsRef in sync for the interaction hook (no re-render needed)
     rawPositionsRef.current = baseAngles;
 
     const rotatedPositions = useMemo(
         () => computeRotatedPositions(baseAngles, rotationOffset, radius, ITEM_ASPECT_RATIO),
         [baseAngles, rotationOffset, radius]
     );
+
+    // ── Emphasized item (closest to emphasisTargetAngle) ────────────────────
+    const emphasizedIndex = useMemo(() => {
+        if (emphasisTargetAngle === null || !isOpen) return -1;
+        let minDiff = Infinity;
+        let idx = -1;
+        rotatedPositions.forEach((pos, i) => {
+            const normCurrent = ((pos.visualAngle % 360) + 360) % 360;
+            const normTarget = ((emphasisTargetAngle % 360) + 360) % 360;
+            let diff = Math.abs(normCurrent - normTarget);
+            if (diff > 180) diff = 360 - diff;
+            if (diff < minDiff) { minDiff = diff; idx = i; }
+        });
+        return idx;
+    }, [emphasisTargetAngle, rotatedPositions, isOpen]);
 
     // ── Render ────────────────────────────────────────────────────────────────
     return (
@@ -136,6 +153,9 @@ function CircularMenu({
                     );
                     const openDelay = i * staggerMs;
                     const closeDelay = (count - 1 - i) * (staggerMs * 0.8);
+                    const isEmphasized = i === emphasizedIndex;
+                    // Show idle hint only on the emphasized item, when not actively moving
+                    const showIdleHint = isEmphasized && isIdle && !isInteracting && !isSnapping;
 
                     return (
                         <MenuItem
@@ -147,6 +167,8 @@ function CircularMenu({
                             isOpen={isOpen}
                             isInteracting={isInteracting}
                             isSnapping={isSnapping}
+                            isEmphasized={isEmphasized}
+                            showIdleHint={showIdleHint}
                             openDelay={openDelay}
                             closeDelay={closeDelay}
                             onClick={closeMenu}

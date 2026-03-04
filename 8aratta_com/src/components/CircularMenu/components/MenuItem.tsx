@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import type { NavLink } from '../types';
 import styles from '../styles/menuItem.module.css';
+import animStyles from '../styles/animations.module.css';
 
 interface MenuItemProps {
     link: NavLink;
@@ -11,6 +12,10 @@ interface MenuItemProps {
     isOpen: boolean;
     isInteracting: boolean;
     isSnapping: boolean;
+    /** True when this item sits closest to the emphasis angle */
+    isEmphasized: boolean;
+    /** True when the menu has been idle long enough to show the drag hint */
+    showIdleHint: boolean;
     openDelay: number;
     closeDelay: number;
     onClick: (e: React.MouseEvent) => void;
@@ -20,6 +25,8 @@ interface MenuItemProps {
  * A single radial navigation pill rendered as a `<Link>`.
  * Accepts pre-computed position, scale, and timing from the parent orchestrator
  * and exposes CSS custom properties for the animation system.
+ * When `showIdleHint` is true, the item that is closest to the emphasis angle
+ * plays a subtle jiggle animation to invite the user to spin the carousel.
  */
 function MenuItem({
     link,
@@ -29,6 +36,7 @@ function MenuItem({
     isOpen,
     isInteracting,
     isSnapping,
+    showIdleHint,
     openDelay,
     closeDelay,
     onClick,
@@ -38,6 +46,7 @@ function MenuItem({
         isOpen ? styles.open : '',
         isInteracting ? styles.interacting : '',
         isSnapping ? styles.snapping : '',
+        showIdleHint ? animStyles.idleTwitch : '',
     ]
         .filter(Boolean)
         .join(' ');

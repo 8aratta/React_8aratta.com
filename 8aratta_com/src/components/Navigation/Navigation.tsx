@@ -63,6 +63,7 @@ function Navigation() {
         neutralScale={isMobile ? 0.33 : undefined}
         angle={isMobile ? 'bottom' : undefined} // With three links open up to bottom because emphasis would be on 225 then... idk maybe angle should define start point instead of direction
         carryMomentum
+        introSpin
       />
     </nav>
   );

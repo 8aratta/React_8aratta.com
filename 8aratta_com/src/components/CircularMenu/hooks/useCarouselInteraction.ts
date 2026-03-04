@@ -1,10 +1,11 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { toRad } from '../utils/mathUtils';
 
 export interface UseCarouselInteractionResult {
     rotationOffset: number;
     isInteracting: boolean;
     isSnapping: boolean;
+    isIdle: boolean;
     handlePointerDown: (e: React.PointerEvent<HTMLDivElement>) => void;
     handlePointerMove: (e: React.PointerEvent<HTMLDivElement>) => void;
     handlePointerUp: (e: React.PointerEvent<HTMLDivElement>) => void;
@@ -16,44 +17,45 @@ interface Options {
     carousel: boolean;
     isOpen: boolean;
     snap: boolean;
-    /**
-     * When true, releasing the drag applies angular momentum — the carousel
-     * continues spinning and decelerates naturally like a fortune wheel.
-     * Slow drags snap quickly; fast drags spin and coast to a stop.
-     */
+    /** Apply drag-speed inertia on release — fortune-wheel spin-down */
     carryMomentum: boolean;
+    /**
+     * When true, the carousel does a single flourish spin when the menu opens
+     * (uses the same momentum physics as carryMomentum).
+     */
+    introSpin: boolean;
     emphasisTargetAngle: number | null;
-    /** Ref to the raw (pre-rotation) base angles — updated by the parent each render */
     rawPositionsRef: React.MutableRefObject<number[]>;
-    /** Ref to the menu container DOM element for hit-testing the center point */
     menuRef: React.RefObject<HTMLDivElement | null>;
-    /** Ref to the hasDragged flag owned by useMenuState */
     hasDraggedRef: React.MutableRefObject<boolean>;
 }
 
-/** Friction coefficient per millisecond — tuned so a fast flick coasts ~1-2 s */
+/** Friction coefficient per ms — fast flick coasts ~1-2 s */
 const FRICTION_PER_MS = 0.003;
-/** Stop the inertia loop when velocity drops below this threshold (deg/ms) */
+/** Stop inertia loop when velocity drops below this (deg/ms) */
 const MIN_VELOCITY = 0.01;
-/** Velocity sample window in milliseconds */
+/** Velocity sample window (ms) */
 const VELOCITY_WINDOW_MS = 80;
-/** Cap max velocity to prevent unrealistic flicks (deg/ms) */
+/** Cap to prevent unrealistic flicks */
 const MAX_VELOCITY = 3.0;
+/** Initial speed for the open flourish (deg/ms) — ~400° total travel */
+const INTRO_SPIN_VELOCITY = 1.2;
+/** Delay after open before the intro spin fires, letting items fan out first */
+const INTRO_SPIN_DELAY_MS = 250;
+/** How long of inactivity before showing the idle hint (ms) */
+const IDLE_DELAY_MS = 4000;
 
 interface VelocitySample {
-    t: number;   // timestamp (ms)
-    dAngle: number; // angular delta (degrees) at this sample
+    t: number;
+    dAngle: number;
 }
 
-/**
- * Manages all pointer and wheel events for the carousel rotation,
- * plus snap-to-emphasis logic and optional drag momentum/inertia.
- */
 export function useCarouselInteraction({
     carousel,
     isOpen,
     snap,
     carryMomentum,
+    introSpin,
     emphasisTargetAngle,
     rawPositionsRef,
     menuRef,
@@ -62,6 +64,7 @@ export function useCarouselInteraction({
     const [rotationOffset, setRotationOffset] = useState(0);
     const [isInteracting, setIsInteracting] = useState(false);
     const [isSnapping, setIsSnapping] = useState(false);
+    const [isIdle, setIsIdle] = useState(false);
 
     const draggingRef = useRef(false);
     const dragStartAngleRef = useRef(0);
@@ -69,12 +72,17 @@ export function useCarouselInteraction({
     const startPointRef = useRef({ x: 0, y: 0 });
     const interactingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
     const snapTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const idleTimerRef = useRef<NodeJS.Timeout | null>(null);
     const scrollDirectionIntentRef = useRef(0);
 
     // Momentum / inertia tracking
     const velocitySamplesRef = useRef<VelocitySample[]>([]);
     const rafIdRef = useRef<number | null>(null);
-    const prevAngleRef = useRef(0); // last pointer angle during move
+    const prevAngleRef = useRef(0);
+
+    // Keep a stable ref to emphasisTargetAngle to avoid stale-closure issues
+    const emphasisTargetAngleRef = useRef(emphasisTargetAngle);
+    emphasisTargetAngleRef.current = emphasisTargetAngle;
 
     // ── Snap logic ──────────────────────────────────────────────────────────
 
@@ -102,7 +110,6 @@ export function useCarouselInteraction({
                 if (diff > 180) diff -= 360;
                 else if (diff < -180) diff += 360;
 
-                // Penalise snapping against the recent scroll direction intent
                 let biasPenalty = 0;
                 if (momentumBias > 0 && diff > 1) biasPenalty = 1000;
                 else if (momentumBias < 0 && diff < -1) biasPenalty = 1000;
@@ -125,7 +132,7 @@ export function useCarouselInteraction({
         });
     }, [snap, emphasisTargetAngle]);
 
-    // ── Interaction heartbeat (used by scroll wheel) ─────────────────────────
+    // ── Wheel interaction heartbeat ─────────────────────────────────────────
 
     const markInteracting = useCallback((baseAngles?: number[]) => {
         setIsInteracting(true);
@@ -137,19 +144,42 @@ export function useCarouselInteraction({
         }, 150);
     }, [executeSnap]);
 
+    // ── Idle hint scheduling ─────────────────────────────────────────────────
+
+    /** Stable reference; avoids including emphasisTargetAngle in scheduleIdleHint deps */
+    const scheduleIdleHint = useCallback(() => {
+        if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
+        if (emphasisTargetAngleRef.current !== null) {
+            idleTimerRef.current = setTimeout(() => setIsIdle(true), IDLE_DELAY_MS);
+        }
+    }, []); // intentionally stable
+
+    const cancelIdleHint = useCallback(() => {
+        setIsIdle(false);
+        scheduleIdleHint(); // restart the countdown after each interaction
+    }, [scheduleIdleHint]);
+
+    // Start / stop idle tracking based on open state
+    useEffect(() => {
+        if (isOpen) {
+            scheduleIdleHint();
+        } else {
+            if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
+            setIsIdle(false);
+        }
+        return () => {
+            if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
+        };
+    }, [isOpen, scheduleIdleHint]);
+
     // ── Momentum / inertia RAF loop ──────────────────────────────────────────
 
-    /**
-     * Kick off the deceleration loop with an initial velocity (deg/ms).
-     * Uses exponential friction: v *= exp(-FRICTION_PER_MS * dt) each frame.
-     */
     const startMomentumLoop = useCallback((initialVelocity: number) => {
         if (rafIdRef.current !== null) cancelAnimationFrame(rafIdRef.current);
 
         let velocity = Math.max(-MAX_VELOCITY, Math.min(MAX_VELOCITY, initialVelocity));
         let lastTime: number | null = null;
 
-        // Let CSS transitions stay off during coasting
         setIsInteracting(true);
         setIsSnapping(false);
 
@@ -158,16 +188,12 @@ export function useCarouselInteraction({
             const dt = now - lastTime;
             lastTime = now;
 
-            // Exponential decay
-            const friction = Math.exp(-FRICTION_PER_MS * dt);
-            velocity *= friction;
-
+            velocity *= Math.exp(-FRICTION_PER_MS * dt);
             setRotationOffset(prev => prev - velocity * dt);
 
             if (Math.abs(velocity) > MIN_VELOCITY) {
                 rafIdRef.current = requestAnimationFrame(tick);
             } else {
-                // Settled — clean up and attempt snap
                 rafIdRef.current = null;
                 setIsInteracting(false);
                 executeSnap(rawPositionsRef.current);
@@ -177,7 +203,7 @@ export function useCarouselInteraction({
         rafIdRef.current = requestAnimationFrame(tick);
     }, [executeSnap, rawPositionsRef]);
 
-    /** Cancel any running momentum loop (called on new pointer-down) */
+    /** Cancel any running momentum loop */
     const cancelMomentum = useCallback(() => {
         if (rafIdRef.current !== null) {
             cancelAnimationFrame(rafIdRef.current);
@@ -186,11 +212,24 @@ export function useCarouselInteraction({
         velocitySamplesRef.current = [];
     }, []);
 
+    // ── Intro spin on open ───────────────────────────────────────────────────
+
+    useEffect(() => {
+        if (!isOpen || !introSpin || !carousel) return;
+
+        const timerId = setTimeout(() => {
+            startMomentumLoop(INTRO_SPIN_VELOCITY);
+        }, INTRO_SPIN_DELAY_MS);
+
+        return () => clearTimeout(timerId);
+    }, [isOpen, introSpin, carousel, startMomentumLoop]);
+
     // ── Pointer handlers ─────────────────────────────────────────────────────
 
     const handlePointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
         if (!carousel || !isOpen) return;
         cancelMomentum();
+        cancelIdleHint();
         setIsInteracting(true);
         setIsSnapping(false);
         scrollDirectionIntentRef.current = 0;
@@ -207,7 +246,7 @@ export function useCarouselInteraction({
         previousRotationRef.current = rotationOffset;
 
         (e.target as HTMLElement).setPointerCapture(e.pointerId);
-    }, [carousel, isOpen, rotationOffset, cancelMomentum, menuRef, hasDraggedRef]);
+    }, [carousel, isOpen, rotationOffset, cancelMomentum, cancelIdleHint, menuRef, hasDraggedRef]);
 
     const handlePointerMove = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
         if (!draggingRef.current) return;
@@ -223,14 +262,12 @@ export function useCarouselInteraction({
         if (!rect) return;
         const angle = Math.atan2(e.clientY - rect.top, e.clientX - rect.left);
 
-        // Delta from drag origin for absolute position
         let delta = angle - dragStartAngleRef.current;
         if (delta > Math.PI) delta -= Math.PI * 2;
         if (delta < -Math.PI) delta += Math.PI * 2;
         const deltaDeg = (delta * 180) / Math.PI;
         setRotationOffset(previousRotationRef.current - deltaDeg);
 
-        // Velocity sample: angular delta from the PREVIOUS pointer position
         if (carryMomentum) {
             let frameAngle = angle - prevAngleRef.current;
             if (frameAngle > Math.PI) frameAngle -= Math.PI * 2;
@@ -239,8 +276,6 @@ export function useCarouselInteraction({
             const now = performance.now();
 
             velocitySamplesRef.current.push({ t: now, dAngle: frameAngleDeg });
-
-            // Trim samples older than the velocity window
             const cutoff = now - VELOCITY_WINDOW_MS;
             velocitySamplesRef.current = velocitySamplesRef.current.filter(s => s.t >= cutoff);
         }
@@ -251,16 +286,15 @@ export function useCarouselInteraction({
         if (!draggingRef.current) return;
         draggingRef.current = false;
         (e.target as HTMLElement).releasePointerCapture(e.pointerId);
+        cancelIdleHint();
 
         if (carryMomentum && velocitySamplesRef.current.length >= 2) {
-            // Compute average velocity over the sample window (deg / ms)
             const samples = velocitySamplesRef.current;
             const totalDuration = samples[samples.length - 1].t - samples[0].t;
             const totalAngle = samples.reduce((sum, s) => sum + s.dAngle, 0);
             const velocityDegPerMs = totalDuration > 0 ? totalAngle / totalDuration : 0;
 
             if (Math.abs(velocityDegPerMs) > MIN_VELOCITY) {
-                // Same sign: drag right (positive angle) → offset decreases → prev - v*dt
                 startMomentumLoop(velocityDegPerMs);
             } else {
                 setIsInteracting(false);
@@ -272,26 +306,28 @@ export function useCarouselInteraction({
         }
 
         velocitySamplesRef.current = [];
-    }, [carryMomentum, startMomentumLoop, executeSnap, rawPositionsRef]);
+    }, [carryMomentum, cancelIdleHint, startMomentumLoop, executeSnap, rawPositionsRef]);
 
     // ── Wheel handler ────────────────────────────────────────────────────────
 
     const handleWheel = useCallback((e: React.WheelEvent<HTMLDivElement>) => {
         if (!carousel || !isOpen) return;
         cancelMomentum();
+        cancelIdleHint();
         scrollDirectionIntentRef.current += e.deltaY;
         markInteracting(rawPositionsRef.current);
         const deltaDeg = e.deltaY * 0.2;
         setRotationOffset(prev => prev - deltaDeg);
-    }, [carousel, isOpen, cancelMomentum, markInteracting, rawPositionsRef]);
+    }, [carousel, isOpen, cancelMomentum, cancelIdleHint, markInteracting, rawPositionsRef]);
 
-    // ── External reset (called on route change) ───────────────────────────────
+    // ── External reset (route change) ────────────────────────────────────────
 
     const resetRotation = useCallback(() => {
         cancelMomentum();
         setRotationOffset(0);
         setIsInteracting(false);
         setIsSnapping(false);
+        setIsIdle(false);
         hasDraggedRef.current = false;
     }, [cancelMomentum, hasDraggedRef]);
 
@@ -299,6 +335,7 @@ export function useCarouselInteraction({
         rotationOffset,
         isInteracting,
         isSnapping,
+        isIdle,
         handlePointerDown,
         handlePointerMove,
         handlePointerUp,

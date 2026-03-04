@@ -30,6 +30,12 @@ export interface CircularMenuProps {
      * spinning and decelerates naturally like a fortune wheel based on drag speed.
      */
     carryMomentum?: boolean;
+    /**
+     * When true, the carousel does a single flourish spin when the menu first opens
+     * to demonstrate the rotation interaction to the user.
+     * Only meaningful when `carousel` is true.
+     */
+    introSpin?: boolean;
 }
 
 export interface PositionEntry {
