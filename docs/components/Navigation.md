@@ -27,7 +27,8 @@ src/components/Navigation/
 
 1. The component grabs the current theme via `useTheme()` to decide which logo to show.
 2. A `setInterval` ticks every second to update the displayed time — formatted in a nice `h:mm AM/PM` style.
-3. Navigation links are defined as a `NAV_LINKS` array and handed off to the `CircularMenu` component in **carousel mode** with snapping enabled.
+3. The `useIsMobile()` hook detects viewport width (≤ 768 px) and toggles the CircularMenu between **carousel mode** on mobile and **standard radial mode** on desktop.
+4. Navigation links are defined as a `NAV_LINKS` array and handed off to the `CircularMenu` component.
 
 ```tsx
 const NAV_LINKS = [
@@ -37,20 +38,31 @@ const NAV_LINKS = [
   // ... more links as needed
 ];
 
+const isMobile = useIsMobile();
+
 <CircularMenu
-  radius={175}
+  radius={130}
   links={NAV_LINKS}
-  carousel
-  emphasize={225}
-  snap
+  carousel={isMobile}
+  snap={isMobile}
+  emphasize={isMobile ? 225 : false}
+  emphasisScale={isMobile ? 1.35 : undefined}
+  neutralScale={isMobile ? 0.33 : undefined}
 />
 ```
 
-The CircularMenu is configured with:
-- **`radius={175}`** — slightly larger circle for breathing room
+### Desktop (> 768 px)
+
+The CircularMenu renders as a **standard radial menu** — items fan out in an arc without carousel dragging, snapping, or emphasis scaling. Clean and simple.
+
+### Mobile (≤ 768 px)
+
+The CircularMenu switches to **carousel mode** with the following config:
 - **`carousel`** — full 360° rotation via drag and scroll wheel
-- **`emphasize={225}`** — items scale up when they reach the 225° position (bottom-left)
 - **`snap`** — nearest item smoothly snaps to the emphasis angle when you stop interacting
+- **`emphasize={225}`** — items scale up when they reach the 225° position (bottom-left)
+- **`emphasisScale={1.35}`** — the emphasized item grows to 1.35× its normal size
+- **`neutralScale={0.33}`** — items on the opposite side shrink down for a depth effect
 
 ---
 
@@ -72,6 +84,14 @@ The left side has the logo (which links back to Home) and the clock. The right s
 The nav applies a `data-theme` attribute based on the current theme. This lets CSS styles adapt:
 - **Dark mode** → white logo, dark-friendly colors
 - **Light mode** → dark logo, light-friendly colors
+
+---
+
+## TODO
+
+- [ ] **Hover animations** — Add theme-aware hover effects to navigation items:
+  - **Dark mode** → illuminating / glow animation on hover
+  - **Light mode** → darkening / dim animation on hover
 
 ---
 

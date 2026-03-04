@@ -2,17 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './Navigation.module.css';
 import { useTheme } from '../../contexts';
+import { useIsMobile } from '../../hooks';
 import { CircularMenu } from '../CircularMenu';
 
-// const NAV_LINKS = [
-//   { to: '/', label: 'Home' },
-//   { to: '/about', label: 'About' },
-//   { to: '/workspace', label: 'Workspace' },
-// ];
-
 const NAV_LINKS = [
-  { to: '/', label: 'Link 1' },
-  { to: '/about', label: 'Link 2' },
+  { to: '/', label: 'Home' },
+  { to: '/about', label: 'About' },
+  { to: '/workspace', label: 'Workspace' },
   { to: '/', label: 'Link 3' },
   { to: '/', label: 'Link 4' },
   { to: '/', label: 'Link 5' },
@@ -21,10 +17,10 @@ const NAV_LINKS = [
   { to: '/', label: 'Link 9' },
 ];
 
-
 function Navigation() {
   const [time, setTime] = useState(new Date());
   const { theme } = useTheme();
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -56,13 +52,14 @@ function Navigation() {
         <span className={styles.clock}>{formatTime(time)}</span>
       </div>
       <CircularMenu
-        radius={175}
+        radius={130}
         links={NAV_LINKS}
-        carousel
-        emphasize={225}
-        // emphasisScale={1.33}
-        // neutralScale={0.33}
-        snap />
+        carousel={isMobile}
+        snap={isMobile}
+        emphasize={isMobile ? 225 : false}
+        emphasisScale={isMobile ? 1.35 : undefined}
+        neutralScale={isMobile ? 0.33 : undefined}
+      />
     </nav>
   );
 }
