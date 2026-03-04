@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import type { NavLink } from '../types';
 import styles from '../styles/menuItem.module.css';
@@ -19,6 +19,9 @@ interface MenuItemProps {
     openDelay: number;
     closeDelay: number;
     onClick: (e: React.MouseEvent) => void;
+    onPointerDown?: (e: React.PointerEvent<HTMLElement>) => void;
+    onPointerMove?: (e: React.PointerEvent<HTMLElement>) => void;
+    onPointerUp?: (e: React.PointerEvent<HTMLElement>) => void;
 }
 
 /**
@@ -40,6 +43,9 @@ function MenuItem({
     openDelay,
     closeDelay,
     onClick,
+    onPointerDown,
+    onPointerMove,
+    onPointerUp,
 }: MenuItemProps) {
     const className = [
         styles.menuItem,
@@ -51,9 +57,21 @@ function MenuItem({
         .filter(Boolean)
         .join(' ');
 
+    const linkRef = useRef<HTMLAnchorElement>(null);
+
+    useEffect(() => {
+        const el = linkRef.current;
+        if (!el) return;
+        const prevent = (e: Event) => e.preventDefault();
+        el.addEventListener('selectstart', prevent);
+        return () => el.removeEventListener('selectstart', prevent);
+    }, []);
+
     return (
         <Link
+            ref={linkRef}
             to={link.to}
+            draggable={false}
             className={className}
             style={
                 {
@@ -65,6 +83,11 @@ function MenuItem({
                 } as React.CSSProperties
             }
             onClick={onClick}
+            onDragStart={e => e.preventDefault()}
+            onPointerDown={onPointerDown}
+            onPointerMove={onPointerMove}
+            onPointerUp={onPointerUp}
+            onPointerCancel={onPointerUp}
         >
             {link.label}
         </Link>

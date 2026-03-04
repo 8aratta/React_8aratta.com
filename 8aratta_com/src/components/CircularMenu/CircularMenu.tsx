@@ -172,6 +172,9 @@ function CircularMenu({
                             openDelay={openDelay}
                             closeDelay={closeDelay}
                             onClick={closeMenu}
+                            onPointerDown={handlePointerDown}
+                            onPointerMove={handlePointerMove}
+                            onPointerUp={handlePointerUp}
                         />
                     );
                 })}

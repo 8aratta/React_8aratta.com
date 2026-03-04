@@ -6,10 +6,10 @@ export interface UseCarouselInteractionResult {
     isInteracting: boolean;
     isSnapping: boolean;
     isIdle: boolean;
-    handlePointerDown: (e: React.PointerEvent<HTMLDivElement>) => void;
-    handlePointerMove: (e: React.PointerEvent<HTMLDivElement>) => void;
-    handlePointerUp: (e: React.PointerEvent<HTMLDivElement>) => void;
-    handleWheel: (e: React.WheelEvent<HTMLDivElement>) => void;
+    handlePointerDown: (e: React.PointerEvent<HTMLElement>) => void;
+    handlePointerMove: (e: React.PointerEvent<HTMLElement>) => void;
+    handlePointerUp: (e: React.PointerEvent<HTMLElement>) => void;
+    handleWheel: (e: React.WheelEvent<HTMLElement>) => void;
     resetRotation: () => void;
 }
 
@@ -226,7 +226,7 @@ export function useCarouselInteraction({
 
     // ── Pointer handlers ─────────────────────────────────────────────────────
 
-    const handlePointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    const handlePointerDown = useCallback((e: React.PointerEvent<HTMLElement>) => {
         if (!carousel || !isOpen) return;
         cancelMomentum();
         cancelIdleHint();
@@ -248,7 +248,7 @@ export function useCarouselInteraction({
         (e.target as HTMLElement).setPointerCapture(e.pointerId);
     }, [carousel, isOpen, rotationOffset, cancelMomentum, cancelIdleHint, menuRef, hasDraggedRef]);
 
-    const handlePointerMove = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    const handlePointerMove = useCallback((e: React.PointerEvent<HTMLElement>) => {
         if (!draggingRef.current) return;
 
         if (
@@ -282,7 +282,7 @@ export function useCarouselInteraction({
         prevAngleRef.current = angle;
     }, [carryMomentum, menuRef, hasDraggedRef]);
 
-    const handlePointerUp = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    const handlePointerUp = useCallback((e: React.PointerEvent<HTMLElement>) => {
         if (!draggingRef.current) return;
         draggingRef.current = false;
         (e.target as HTMLElement).releasePointerCapture(e.pointerId);
@@ -310,7 +310,7 @@ export function useCarouselInteraction({
 
     // ── Wheel handler ────────────────────────────────────────────────────────
 
-    const handleWheel = useCallback((e: React.WheelEvent<HTMLDivElement>) => {
+    const handleWheel = useCallback((e: React.WheelEvent<HTMLElement>) => {
         if (!carousel || !isOpen) return;
         cancelMomentum();
         cancelIdleHint();

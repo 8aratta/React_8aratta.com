@@ -13,6 +13,8 @@ Now with **carousel mode** — drag or scroll to spin the whole ring of links ar
 - Each link is positioned along a configurable circular arc (default: 90° quarter-arc centered at 225°)
 - Applies a **liquid glass SVG displacement filter** to the menu items for that frosted-glass-meets-jelly aesthetic
 - **Carousel mode** — enables full 360° rotation via **drag** and **scroll wheel**
+- **Drag from anywhere** — carousel drag works on the overlay *and* directly on menu items, so mobile users can grab a pill and spin
+- **Mobile-hardened** — menu items are fully non-selectable and non-highlightable on touch devices while remaining tappable for navigation
 - **Emphasis & snap** — scale items up when they reach a focal angle, and optionally snap the nearest item into place when interaction stops
 - **Elliptical angle warping** — rectangular text pills get visually even spacing via an aspect-ratio distortion on the circle
 - **Automatically closes** when you navigate to a new page or click outside the menu
@@ -142,10 +144,12 @@ Items fan out along a fixed arc (quarter-circle by default). No dragging, no spi
 
 Items are placed around a **full 360° ring** and can be **rotated** by:
 
-- **Dragging** — click and drag anywhere on the overlay to spin the ring (pointer capture keeps it smooth)
+- **Dragging** — click/touch and drag anywhere — on the overlay *or directly on a menu item* — to spin the ring (pointer capture keeps it smooth)
 - **Scroll wheel** — scroll up/down to rotate the ring
 
 In carousel mode the arc spans a full circle, so items wrap around seamlessly. The overlay gets a `grab` cursor to hint at the interaction. During active dragging, link clicks are suppressed so you don't accidentally navigate while spinning.
+
+On mobile, dragging a menu pill feels natural: the carousel pointer handlers (`onPointerDown` / `onPointerMove` / `onPointerUp` / `onPointerCancel`) are forwarded from `CircularMenu` through each `MenuItem`, so the same drag-and-snap physics apply regardless of where the touch lands.
 
 ---
 
@@ -180,6 +184,34 @@ The CSS handles three distinct states for menu items:
 | **Snapping** | `.menuItem.open.snapping` | Smooth 0.4s spring transition for the snap animation |
 
 This prevents the carousel from feeling sluggish during drag (no transition delay) while still giving that satisfying bounce when items snap into place.
+
+---
+
+## Touch & Selection Hardening
+
+Menu items are fully locked against accidental text selection, native drag, and touch highlights. This is critical on mobile where a user's intent to spin the carousel would otherwise trigger the browser's text selection or long-press callout.
+
+### CSS Layer (`menuItem.module.css`)
+
+| Property | Purpose |
+|----------|----------|
+| `user-select: none` | Prevents text selection on all platforms |
+| `-webkit-user-drag: none` | Blocks WebKit/Safari native element drag |
+| `-webkit-touch-callout: none` | Suppresses iOS long-press context menu (copy/paste) |
+| `-webkit-tap-highlight-color: transparent` | Removes the coloured tap flash on mobile Chrome/Safari |
+| `touch-action: none` | Tells the browser not to handle touches on items (no scroll/zoom) — critical because open items have `pointer-events: auto` and receive touches directly, bypassing the overlay's own `touch-action: none` |
+
+The `::before` and `::after` pseudo-elements both carry `pointer-events: none` and `user-select: none` to prevent the glass layers from intercepting clicks or selection.
+
+### JS Layer (`MenuItem.tsx`)
+
+| Mechanism | How |
+|-----------|------|
+| `draggable={false}` | HTML attribute on the `<Link>` — disables native drag |
+| `onDragStart={e => e.preventDefault()}` | Belt-and-suspenders: catches any remaining drag events |
+| `selectstart` listener via `useRef` + `useEffect` | Attached as a native DOM event (React Router's `<Link>` doesn't expose `onSelectStart` in its type defs) — prevents text selection at the event level |
+
+Together these ensure that touching or clicking a menu pill never triggers highlighting, selection, or native drag — while carousel spinning and tap-to-navigate both continue to work normally.
 
 ---
 
@@ -224,7 +256,7 @@ The menu closes when:
 - The **overlay** is clicked (clicking outside, without dragging)
 - The **route changes** (via `useLocation()` watching `location.pathname` — also resets rotation offset)
 
-The overlay is a transparent full-screen div that appears when the menu is open. In carousel mode it also handles drag and wheel events. Smart multitasking.
+The overlay is a transparent full-screen div that appears when the menu is open. In carousel mode it also handles drag and wheel events. The same pointer handlers are also forwarded to each `MenuItem`, so touches that land on a pill still drive the carousel. Smart multitasking.
 
 ---
 
