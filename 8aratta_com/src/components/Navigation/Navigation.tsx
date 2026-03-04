@@ -4,11 +4,23 @@ import styles from './Navigation.module.css';
 import { useTheme } from '../../contexts';
 import { CircularMenu } from '../CircularMenu';
 
+// const NAV_LINKS = [
+//   { to: '/', label: 'Home' },
+//   { to: '/about', label: 'About' },
+//   { to: '/workspace', label: 'Workspace' },
+// ];
+
 const NAV_LINKS = [
-  { to: '/', label: 'Home' },
-  { to: '/about', label: 'About' },
-  { to: '/workspace', label: 'Workspace' },
+  { to: '/', label: 'Link 1' },
+  { to: '/about', label: 'Link 2' },
+  { to: '/', label: 'Link 3' },
+  { to: '/', label: 'Link 4' },
+  { to: '/', label: 'Link 5' },
+  { to: '/', label: 'Link 7' },
+  { to: '/', label: 'Link 8' },
+  { to: '/', label: 'Link 9' },
 ];
+
 
 function Navigation() {
   const [time, setTime] = useState(new Date());
@@ -43,7 +55,14 @@ function Navigation() {
         </Link>
         <span className={styles.clock}>{formatTime(time)}</span>
       </div>
-      <CircularMenu links={NAV_LINKS} />
+      <CircularMenu
+        radius={175}
+        links={NAV_LINKS}
+        carousel
+        emphasize={225}
+        // emphasisScale={1.33}
+        // neutralScale={0.33}
+        snap />
     </nav>
   );
 }

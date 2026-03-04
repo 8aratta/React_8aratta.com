@@ -27,15 +27,30 @@ src/components/Navigation/
 
 1. The component grabs the current theme via `useTheme()` to decide which logo to show.
 2. A `setInterval` ticks every second to update the displayed time — formatted in a nice `h:mm AM/PM` style.
-3. Navigation links are defined as a `NAV_LINKS` array and handed off to the `CircularMenu` component, which handles the radial layout, animations, and interactions.
+3. Navigation links are defined as a `NAV_LINKS` array and handed off to the `CircularMenu` component in **carousel mode** with snapping enabled.
 
 ```tsx
 const NAV_LINKS = [
   { to: '/', label: 'Home' },
   { to: '/about', label: 'About' },
   { to: '/workspace', label: 'Workspace' },
+  // ... more links as needed
 ];
+
+<CircularMenu
+  radius={175}
+  links={NAV_LINKS}
+  carousel
+  emphasize={225}
+  snap
+/>
 ```
+
+The CircularMenu is configured with:
+- **`radius={175}`** — slightly larger circle for breathing room
+- **`carousel`** — full 360° rotation via drag and scroll wheel
+- **`emphasize={225}`** — items scale up when they reach the 225° position (bottom-left)
+- **`snap`** — nearest item smoothly snaps to the emphasis angle when you stop interacting
 
 ---
 
@@ -48,7 +63,7 @@ const NAV_LINKS = [
 └──────────────────────────────────────────────────┘
 ```
 
-The left side has the logo (which links back to Home) and the clock. The right side has the CircularMenu hamburger button that, when clicked, fans out the nav links in a radial arc.
+The left side has the logo (which links back to Home) and the clock. The right side has the CircularMenu hamburger button. When clicked, links fan out in a full ring that you can drag or scroll to spin.
 
 ---
 

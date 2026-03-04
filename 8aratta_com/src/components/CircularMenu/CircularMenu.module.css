@@ -70,6 +70,15 @@
     pointer-events: auto;
 }
 
+.carouselOverlay {
+    touch-action: none;
+    cursor: grab;
+}
+
+.carouselOverlay:active {
+    cursor: grabbing;
+}
+
 /* ─── Circular Menu ─── */
 .circularMenu {
     position: fixed;
@@ -159,8 +168,19 @@
     opacity: 1;
     pointer-events: auto;
     /* Substitutes variables into the EXACT SAME math signature as closed state */
-    transform: translate(calc(var(--tx) - 50%), calc(var(--ty) - 50%)) scale(1);
+    transform: translate(calc(var(--tx) - 50%), calc(var(--ty) - 50%)) scale(var(--scale-factor, 1));
     transition-delay: var(--open-delay, 0ms);
+}
+
+/* ─── Dragging State (Fast Track) ─── */
+.menuItem.open.interacting {
+    transition: none !important;
+}
+
+/* ─── Snapping State (Smooth Catch) ─── */
+.menuItem.open.snapping {
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    transition-delay: 0s !important;
 }
 
 /* ─── Mobile ─── */

@@ -12,12 +12,24 @@ interface CircularMenuProps {
     links: NavLink[];
     /** Radius in px for the radial arc (default: 130) */
     radius?: number;
-    /** Start angle in degrees — 180 = straight left (default: 180) */
+    /** Defines the central focal point of the arc instead of manually placing start/end angles (e.g. 225 or 'bottom') */
+    angle?: number | 'top' | 'right' | 'bottom' | 'left';
+    /** Start angle in degrees (overrides `angle` if set) */
     startAngle?: number;
-    /** End angle in degrees — 270 = straight down (default: 270) */
+    /** End angle in degrees (overrides `angle` if set) */
     endAngle?: number;
     /** Stagger delay in ms between each item (default: 50) */
     staggerMs?: number;
+    /** Whether to enable 360-degree draggable carousel mode (default: false) */
+    carousel?: boolean;
+    /** Emphasize a specific angle by scaling items up when they reach it */
+    emphasize?: boolean | number | 'top' | 'right' | 'bottom' | 'left';
+    /** Whether the carousel should smoothly snap items to the emphasis angle when interaction stops */
+    snap?: boolean;
+    /** What scale factor to apply to the emphasized item (e.g. 1.33) */
+    emphasisScale?: number;
+    /** If set, smoothly interpolates items on the opposite side to this scale (e.g. 0.33) */
+    neutralScale?: number;
 }
 
 /** Convert degrees to radians */
@@ -135,11 +147,22 @@ function buildLiquidGlassFilter(
 function CircularMenu({
     links,
     radius = 130,
-    startAngle = 180,
-    endAngle = 270,
+    angle,
+    startAngle,
+    endAngle,
     staggerMs = 50,
+    carousel = false,
+    emphasize = false,
+    snap = false,
+    emphasisScale,
+    neutralScale,
 }: CircularMenuProps) {
     const [isOpen, setIsOpen] = useState(false);
+    const [isInteracting, setIsInteracting] = useState(false);
+    const [isSnapping, setIsSnapping] = useState(false);
+    const interactingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const snapTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const scrollDirectionIntentRef = useRef(0);
     const { theme } = useTheme();
     const location = useLocation();
     const menuRef = useRef<HTMLDivElement>(null);
@@ -147,9 +170,172 @@ function CircularMenu({
     const filtersBuilt = useRef(false);
     const count = links.length;
 
+    const [rotationOffset, setRotationOffset] = useState(0);
+    const draggingRef = useRef(false);
+    const dragStartAngleRef = useRef(0);
+    const previousRotationRef = useRef(0);
+    const hasDraggedRef = useRef(false);
+    const startPointRef = useRef({ x: 0, y: 0 });
+
+    // Derive calculated start and end angles from the `angle` or fallback parameters
+    const { calcStart, calcEnd } = useMemo(() => {
+        let center = 225; // default
+        if (typeof angle === 'number') center = angle;
+        else if (angle === 'top') center = 90;
+        else if (angle === 'left') center = 180;
+        else if (angle === 'bottom') center = 270;
+        else if (angle === 'right') center = 0;
+
+        return {
+            calcStart: startAngle !== undefined ? startAngle : center - 45,
+            calcEnd: endAngle !== undefined ? endAngle : center + 45,
+        };
+    }, [angle, startAngle, endAngle]);
+
+    // Memoize the target angle for emphasis and snapping
+    const emphasisTargetAngle = useMemo(() => {
+        if (emphasize === false) return null;
+        if (typeof emphasize === 'number') return emphasize;
+        if (emphasize === 'top') return 90;
+        if (emphasize === 'left') return 180;
+        if (emphasize === 'bottom') return 270;
+        if (emphasize === 'right') return 0;
+        return (calcStart + calcEnd) / 2;
+    }, [emphasize, calcStart, calcEnd]);
+
+    const executeSnap = useCallback((baseAngles: number[]) => {
+        if (!snap || emphasisTargetAngle === null || baseAngles.length === 0) return;
+
+        let momentumBias = 0;
+        if (scrollDirectionIntentRef.current > 10) momentumBias = 1;
+        else if (scrollDirectionIntentRef.current < -10) momentumBias = -1;
+        scrollDirectionIntentRef.current = 0;
+
+        setRotationOffset(prevOffset => {
+            let bestDiff = Infinity;
+            let diffToApply = 0;
+            const normTarget = ((emphasisTargetAngle % 360) + 360) % 360;
+
+            baseAngles.forEach(angle => {
+                const currentTotal = angle + prevOffset;
+                const rad = toRad(currentTotal);
+                const distortedRad = Math.atan2(Math.sin(rad), Math.cos(rad) * 1.35);
+                const distortedDeg = (distortedRad * 180) / Math.PI;
+
+                const normCurrent = ((distortedDeg % 360) + 360) % 360;
+                let diff = normTarget - normCurrent;
+
+                if (diff > 180) diff -= 360;
+                else if (diff < -180) diff += 360;
+
+                let biasPenalty = 0;
+                if (momentumBias > 0 && diff > 1) {
+                    biasPenalty = 1000;
+                } else if (momentumBias < 0 && diff < -1) {
+                    // penalized for going backward against upward scrolling intent
+                    biasPenalty = 1000;
+                }
+
+                if (Math.abs(diff) + biasPenalty < bestDiff) {
+                    bestDiff = Math.abs(diff) + biasPenalty;
+                    diffToApply = diff;
+                }
+            });
+
+            if (bestDiff > 0.1) {
+                // Instantly clear interaction overrides so CSS transition takes over
+                setIsInteracting(false);
+                if (interactingTimeoutRef.current) clearTimeout(interactingTimeoutRef.current);
+
+                // Activate CSS snapping speed
+                setIsSnapping(true);
+                if (snapTimeoutRef.current) clearTimeout(snapTimeoutRef.current);
+                snapTimeoutRef.current = setTimeout(() => setIsSnapping(false), 400);
+
+                return prevOffset + diffToApply;
+            }
+            return prevOffset;
+        });
+    }, [snap, emphasisTargetAngle]);
+
+    const markInteracting = useCallback((baseAngles?: number[]) => {
+        setIsInteracting(true);
+        setIsSnapping(false);
+        if (interactingTimeoutRef.current) clearTimeout(interactingTimeoutRef.current);
+        interactingTimeoutRef.current = setTimeout(() => {
+            setIsInteracting(false);
+            if (baseAngles) executeSnap(baseAngles);
+        }, 150);
+    }, [executeSnap]);
+
+    const handlePointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+        if (!carousel || !isOpen) return;
+        markInteracting();
+        scrollDirectionIntentRef.current = 0;
+        draggingRef.current = true;
+        hasDraggedRef.current = false;
+        startPointRef.current = { x: e.clientX, y: e.clientY };
+
+        const rect = menuRef.current?.getBoundingClientRect();
+        if (!rect) return;
+        const centerX = rect.left;
+        const centerY = rect.top;
+
+        const angle = Math.atan2(e.clientY - centerY, e.clientX - centerX);
+        dragStartAngleRef.current = angle;
+        previousRotationRef.current = rotationOffset;
+
+        (e.target as HTMLElement).setPointerCapture(e.pointerId);
+    }, [carousel, isOpen, rotationOffset]);
+
+    const handlePointerMove = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+        if (!draggingRef.current) return;
+
+        if (Math.abs(e.clientX - startPointRef.current.x) > 5 || Math.abs(e.clientY - startPointRef.current.y) > 5) {
+            hasDraggedRef.current = true;
+        }
+
+        const rect = menuRef.current?.getBoundingClientRect();
+        if (!rect) return;
+        const centerX = rect.left;
+        const centerY = rect.top;
+
+        const angle = Math.atan2(e.clientY - centerY, e.clientX - centerX);
+        let delta = angle - dragStartAngleRef.current;
+
+        if (delta > Math.PI) delta -= Math.PI * 2;
+        if (delta < -Math.PI) delta += Math.PI * 2;
+
+        const deltaDeg = (delta * 180) / Math.PI;
+        setRotationOffset(previousRotationRef.current - deltaDeg);
+        markInteracting();
+    }, [markInteracting]);
+
+    const handlePointerUp = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+        if (!draggingRef.current) return;
+        draggingRef.current = false;
+        (e.target as HTMLElement).releasePointerCapture(e.pointerId);
+        executeSnap(rawPositionsRef.current);
+    }, [executeSnap]);
+
+    const handleWheel = useCallback((e: React.WheelEvent<HTMLDivElement>) => {
+        if (!carousel || !isOpen) return;
+
+        scrollDirectionIntentRef.current += e.deltaY;
+
+        // Prevent page scroll when spinning the wheel over the menu
+        markInteracting(rawPositionsRef.current);
+
+        // Adjust the rotation multiplier as needed for scroll sensitivity
+        const deltaDeg = e.deltaY * 0.2;
+        setRotationOffset(prev => prev - deltaDeg);
+    }, [carousel, isOpen, markInteracting]);
+
     // Close menu on route change
     useEffect(() => {
         setIsOpen(false);
+        setRotationOffset(0);
+        hasDraggedRef.current = false;
     }, [location.pathname]);
 
     // Build SVG displacement filters once the menu first opens
@@ -175,12 +361,17 @@ function CircularMenu({
         setIsOpen((prev) => !prev);
     }, []);
 
-    const closeMenu = useCallback(() => {
+    const closeMenu = useCallback((e?: React.MouseEvent | React.FocusEvent) => {
+        if (hasDraggedRef.current) {
+            setTimeout(() => { hasDraggedRef.current = false; }, 0);
+            return;
+        }
         setIsOpen(false);
     }, []);
 
     // Pre-compute positions for each link
     const [dims, setDims] = useState<{ w: number; h: number }[]>([]);
+    const rawPositionsRef = useRef<number[]>([]);
 
     useEffect(() => {
         if (!isOpen) return;
@@ -196,71 +387,37 @@ function CircularMenu({
     }, [isOpen, links]);
 
     const positions = useMemo(() => {
+        const actualEndAngle = carousel ? calcStart + 360 : calcEnd;
+        const actualCount = carousel ? count : Math.max(1, count - 1);
+
         // Fallback or purely static layout before we measure
         let angles = links.map((_, i) =>
             count === 1
-                ? (startAngle + endAngle) / 2
-                : startAngle + (i * (endAngle - startAngle)) / (count - 1)
+                ? (calcStart + actualEndAngle) / 2
+                : calcStart + (i * (actualEndAngle - calcStart)) / actualCount
         );
 
-        if (dims.length === count && count > 1) {
-            // Iteratively equalize the visual gaps along the arc
-            const ARC_LENGTH = Math.abs(endAngle - startAngle);
-            const ITERATIONS = 15;
+        rawPositionsRef.current = angles;
+        return angles;
+    }, [links, calcStart, calcEnd, count, dims, carousel]);
 
-            for (let iter = 0; iter < ITERATIONS; iter++) {
-                // Calculate how much "angular size" each pill effectively takes up at its current angle
-                // Approximated by projecting its bounding box onto the tangent line of the circle
-                const extents = dims.map((dim, i) => {
-                    const rad = toRad(angles[i]);
-                    // Box tangent projection length approximate formula:
-                    // tangent is perpendicular to radius, so its angle is rad + pi/2
-                    const tangX = Math.cos(rad + Math.PI / 2);
-                    // CSS Y is inverted, but for absolute length projection it doesn't matter
-                    const tangY = Math.sin(rad + Math.PI / 2);
+    // Apply rotation mathematically outside of the heavy gap-balancing loop
+    // Warp the mathematical angle with an elliptical aspect ratio to space out rectangular text
+    const itemAspectRatio = 1.35;
 
-                    // Project the width and height vectors of the box onto the tangent vector
-                    const projW = Math.abs(tangX * dim.w);
-                    const projH = Math.abs(tangY * dim.h);
+    const rotatedPositions = useMemo(() => {
+        return positions.map(raw => {
+            const mathematicalAngle = raw + rotationOffset;
+            const rad = toRad(mathematicalAngle);
 
-                    // Total effective linear length of the box tangent to the circle
-                    const linearExtent = projW + projH;
+            // Phase warp to stretch gaps at the top/bottom and squish left/right
+            const distortedRad = Math.atan2(Math.sin(rad), Math.cos(rad) * itemAspectRatio);
+            let distortedDeg = (distortedRad * 180) / Math.PI;
 
-                    // Convert linear extent to angular extent
-                    return (linearExtent / (radius * Math.PI * 2)) * 360;
-                });
-                // Calculate total extent that lies BETWEEN the center of the first item and center of the last item
-                let internalExtent = extents[0] / 2 + extents[count - 1] / 2;
-                for (let i = 1; i < count - 1; i++) {
-                    internalExtent += extents[i];
-                }
-
-                // Remaining angle to split as equal gaps between items (can be negative if they overlap)
-                const totalGapAngle = ARC_LENGTH - internalExtent;
-                // If there's only one gap or zero, avoid division by zero
-                const gapSize = count > 1 ? totalGapAngle / (count - 1) : 0;
-
-                // Build new smoothed angles, pinning strictly to startAngle and endAngle
-                let currAngle = startAngle;
-                const newAngles: number[] = [currAngle];
-
-                const direction = endAngle >= startAngle ? 1 : -1;
-                for (let i = 0; i < count - 1; i++) {
-                    const step = (extents[i] / 2) + gapSize + (extents[i + 1] / 2);
-                    currAngle += step * direction;
-                    newAngles.push(currAngle);
-                }
-
-                // Enforce pinning at the exact end angle to eliminate float drift
-                newAngles[count - 1] = endAngle;
-
-                // Blend them lightly for stability
-                angles = angles.map((old, i) => old * 0.4 + newAngles[i] * 0.6);
-            }
-        }
-
-        return angles.map(angle => getRadialPosition(angle, radius));
-    }, [links, radius, startAngle, endAngle, count, dims]);
+            const pos = getRadialPosition(distortedDeg, radius);
+            return { x: pos.x, y: pos.y, visualAngle: distortedDeg, mathAngle: mathematicalAngle };
+        });
+    }, [positions, rotationOffset, radius]);
 
     return (
         <div data-theme={theme}>
@@ -275,17 +432,49 @@ function CircularMenu({
                 <defs ref={svgDefsRef} />
             </svg>
 
-            {/* Overlay to catch outside clicks */}
+            {/* Overlay to catch outside clicks and handle drag */}
             <div
-                className={`${styles.menuOverlay} ${isOpen ? styles.visible : ''}`}
+                className={`${styles.menuOverlay} ${isOpen ? styles.visible : ''} ${carousel ? styles.carouselOverlay : ''}`}
                 onClick={closeMenu}
+                onPointerDown={handlePointerDown}
+                onPointerMove={handlePointerMove}
+                onPointerUp={handlePointerUp}
+                onPointerCancel={handlePointerUp}
+                onWheel={handleWheel}
                 aria-hidden="true"
             />
 
             {/* Circular menu container */}
             <div className={styles.circularMenu} ref={menuRef}>
                 {links.map((link, i) => {
-                    const { x, y } = positions[i];
+                    const posObj = rotatedPositions[i] || { x: 0, y: 0, visualAngle: 0, mathAngle: 0 };
+                    const finalAngle = posObj.visualAngle;
+                    const { x, y } = posObj;
+
+                    let itemScale = 1;
+                    if (emphasisTargetAngle !== null && emphasisScale !== undefined) {
+                        // Shortest angular distance between final visual item angle and target
+                        const normCurrent = ((finalAngle % 360) + 360) % 360;
+                        const normTarget = ((emphasisTargetAngle % 360) + 360) % 360;
+
+                        let diff = Math.abs(normCurrent - normTarget);
+                        if (diff > 180) diff = 360 - diff;
+
+                        if (typeof neutralScale === 'number') {
+                            // Continuous global proportion: [0, 180] degrees -> [emphasisScale, neutralScale] scale
+                            const normalizedDist = diff / 180;
+                            const smoothFactor = (Math.cos(normalizedDist * Math.PI) + 1) / 2;
+                            itemScale = neutralScale + ((emphasisScale - neutralScale) * smoothFactor);
+                        } else {
+                            // Bump map: ±45 degrees only
+                            if (diff < 45) {
+                                // scale from 1 up to emphasisScale
+                                const boost = Math.cos((diff / 45) * (Math.PI / 2)) * (emphasisScale - 1);
+                                itemScale = 1 + boost;
+                            }
+                        }
+                    }
+
                     const openDelay = i * staggerMs;
                     const closeDelay = (count - 1 - i) * (staggerMs * 0.8);
 
@@ -293,11 +482,12 @@ function CircularMenu({
                         <Link
                             key={link.to}
                             to={link.to}
-                            className={`${styles.menuItem} ${isOpen ? styles.open : ''}`}
+                            className={`${styles.menuItem} ${isOpen ? styles.open : ''} ${isInteracting ? styles.interacting : ''} ${isSnapping ? styles.snapping : ''}`}
                             style={
                                 {
                                     '--tx': `${x}px`,
                                     '--ty': `${y}px`,
+                                    '--scale-factor': itemScale,
                                     '--open-delay': `${openDelay}ms`,
                                     '--close-delay': `${closeDelay}ms`,
                                 } as React.CSSProperties
