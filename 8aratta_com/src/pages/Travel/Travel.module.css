@@ -1,0 +1,547 @@
+@font-face {
+  font-family: 'Resoft';
+  src: url(../../../public/assets/fonts/Resoft.ttf) format('truetype');
+}
+
+/* ─── Page root ─────────────────────────────────────────────────────── */
+.travelPage {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: #0a0a0a;
+  color: #e0e0e0;
+  scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
+}
+
+.travelPage[data-theme='light'] {
+  background: #e8e8e8;
+  color: #1a1a1a;
+}
+
+/* ─── Section indicator dots (right edge) ───────────────────────────── */
+.sectionDots {
+  position: fixed;
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.travelPage[data-theme='light'] .dot {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.dot.active {
+  background: rgba(255, 255, 255, 0.85);
+  transform: scale(1.5);
+}
+
+.travelPage[data-theme='light'] .dot.active {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+/* ─── Hero ───────────────────────────────────────────────────────────── */
+.heroSection {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  text-align: center;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+.heroBg {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 60%, #1a1a1a 0%, #0a0a0a 70%);
+  z-index: 0;
+}
+
+.travelPage[data-theme='light'] .heroBg {
+  background: radial-gradient(ellipse at 50% 60%, #d4d4d4 0%, #c8c8c8 70%);
+}
+
+.heroContent {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.heroEyebrow {
+  font-family: 'Resoft', sans-serif;
+  font-size: clamp(0.65rem, 1.5vw, 0.85rem);
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+  margin: 0;
+}
+
+.travelPage[data-theme='light'] .heroEyebrow {
+  color: rgba(0, 0, 0, 0.35);
+}
+
+.heroTitle {
+  font-family: 'Resoft', sans-serif;
+  font-size: clamp(4rem, 10vw, 8rem);
+  font-weight: 400;
+  line-height: 1;
+  margin: 0;
+  color: #ffffff;
+  mix-blend-mode: difference;
+}
+
+.travelPage[data-theme='light'] .heroTitle {
+  color: #1a1a1a;
+  mix-blend-mode: normal;
+}
+
+.heroSubtitle {
+  font-size: clamp(0.75rem, 1.8vw, 0.95rem);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  margin: 0.5rem 0 0;
+}
+
+.travelPage[data-theme='light'] .heroSubtitle {
+  color: rgba(0, 0, 0, 0.4);
+}
+
+.heroPreamble {
+  max-width: 480px;
+  font-size: clamp(0.85rem, 1.6vw, 1rem);
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.45);
+  text-align: center;
+  margin: 1.5rem 0 0;
+}
+
+.travelPage[data-theme='light'] .heroPreamble {
+  color: rgba(0, 0, 0, 0.45);
+}
+
+.scrollIndicator {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  z-index: 1;
+}
+
+.scrollLine {
+  width: 1px;
+  height: 3rem;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.4));
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+
+.travelPage[data-theme='light'] .scrollLine {
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.3));
+}
+
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.4; transform: scaleY(1); }
+  50%       { opacity: 1;   transform: scaleY(1.1); }
+}
+
+.scrollLabel {
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.travelPage[data-theme='light'] .scrollLabel {
+  color: rgba(0, 0, 0, 0.3);
+}
+
+/* ─── Trip header (within each story set) ───────────────────────────── */
+.tripHeader {
+  position: relative;
+  height: 40vh;
+  display: flex;
+  align-items: flex-end;
+  padding: 0 4rem 3rem;
+  overflow: hidden;
+}
+
+.tripHeaderBg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.6) 100%);
+}
+
+.travelPage[data-theme='light'] .tripHeaderBg {
+  background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.35) 100%);
+}
+
+.tripLabel {
+  position: relative;
+  z-index: 1;
+}
+
+.tripLabelEyebrow {
+  font-size: 0.7rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  display: block;
+  margin-bottom: 0.4rem;
+}
+
+.tripLabelTitle {
+  font-family: 'Resoft', sans-serif;
+  font-size: clamp(2rem, 5vw, 4rem);
+  font-weight: 400;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1;
+}
+
+/* ─── Story section (shared) ─────────────────────────────────────────── */
+.storySection {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+/* ────────── media layer ────────── */
+.mediaBg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: 0;
+}
+
+/* Blurred video for privacy */
+.blurredVideo {
+  filter: blur(3px);
+  /* scaling up to hide blur edges */
+  transform: scale(1.04);
+}
+
+/* cinematic dimming overlay */
+
+.mediaOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.78) 0%,
+    rgba(0, 0, 0, 0.55) 20%,
+    rgba(0, 0, 0, 0.1) 50%,
+    rgba(0, 0, 0, 0.55) 80%,
+    rgba(0, 0, 0, 0.78) 100%
+  );
+  z-index: 1;
+}
+
+/* light overlay */
+.travelPage[data-theme='light'] .mediaOverlay {
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0.33) 0%,
+    rgba(255, 255, 255, 0.11) 20%,
+    rgba(255, 255, 255, 0.06) 50%,
+    rgba(255, 255, 255, 0.11) 80%,
+    rgba(255, 255, 255, 0.33) 100%
+  );
+}
+
+/* ────────── text panel ────────── */
+.textPanel {
+  position: relative;
+  z-index: 2;
+  padding: 4rem 3rem 4rem 4rem;
+  max-width: 520px;
+}
+
+.storySection.textRight .textPanel {
+  margin-left: auto;
+  padding: 4rem 4rem 4rem 3rem;
+  text-align: right;
+}
+
+.storySection.textRight .storySeparator {
+  margin-left: auto;
+}
+
+/* ────────── reveal animations ────────── */
+.revealUp {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+
+.fromLeft {
+  opacity: 0;
+  transform: translateX(-60px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+
+.fromRight {
+  opacity: 0;
+  transform: translateX(60px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+
+.visible {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* staggered children when panel becomes visible */
+.revealUp.visible .storyTag,
+.fromLeft.visible .storyTag,
+.fromRight.visible .storyTag {
+  transition-delay: 0.05s;
+}
+
+/* ────────── story text elements ────────── */
+.storyTag {
+  display: inline-block;
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 0.3rem 0.75rem;
+  border-radius: 2px;
+  margin-bottom: 1.4rem;
+}
+
+.storyTitle {
+  font-family: 'Resoft', sans-serif;
+  font-size: clamp(2rem, 4.5vw, 3.2rem);
+  font-weight: 400;
+  color: #ffffff;
+  margin: 0 0 1.4rem;
+  line-height: 1.1;
+}
+
+.storyBody {
+  font-size: clamp(0.85rem, 1.5vw, 1rem);
+  line-height: 1.9;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 1rem;
+}
+
+.storyBody:last-child {
+  margin-bottom: 0;
+}
+
+.storyHighlight {
+  color: #ffffff;
+  font-style: italic;
+}
+
+.storySeparator {
+  width: 2.5rem;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.25);
+  margin: 1.5rem 0;
+}
+
+/* ─── Polaroid insets ───────────────────────────────────────────────── */
+/* Left-side: used when text panel is on the right */
+.polaroidWrapLeft {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 2.5rem;
+  z-index: 3;
+  transform: rotate(-3.5deg);
+  transition: transform 0.4s ease;
+}
+
+.polaroidWrapLeft:hover {
+  transform: rotate(-1deg) scale(1.04);
+}
+
+/* Right-side: used when text panel is on the left */
+.polaroidWrapRight {
+  position: absolute;
+  bottom: 2.5rem;
+  right: 2.5rem;
+  z-index: 3;
+  transform: rotate(3.5deg);
+  transition: transform 0.4s ease;
+}
+
+.polaroidWrapRight:hover {
+  transform: rotate(1deg) scale(1.04);
+}
+
+.polaroid {
+  background: #f4f0e8;
+  padding: 0.6rem 0.6rem 2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.55), 0 2px 8px rgba(0, 0, 0, 0.3);
+  width: clamp(140px, 16vw, 210px);
+}
+
+.polaroidImg {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+  aspect-ratio: 1 / 1;
+  filter: saturate(0.88);
+}
+
+.polaroidCaption {
+  font-size: 0.65rem;
+  text-align: center;
+  margin-top: 0.8rem;
+  color: #555;
+  font-family: 'Resoft', sans-serif;
+  letter-spacing: 0.05em;
+}
+
+/* polaroid reveal — right-side default (positive tilt) */
+.polaroidReveal {
+  opacity: 0;
+  transform: rotate(3.5deg) translateY(30px) scale(0.95);
+  transition: opacity 0.8s ease 0.4s, transform 0.8s ease 0.4s;
+}
+
+.polaroidReveal.visible {
+  opacity: 1;
+  transform: rotate(3.5deg) translateY(0) scale(1);
+}
+
+.polaroidReveal.visible:hover {
+  transform: rotate(1deg) translateY(0) scale(1.04);
+}
+
+/* polaroid reveal — left-side override (negative tilt) */
+.polaroidRevealLeft {
+  transform: rotate(-3.5deg) translateY(30px) scale(0.95);
+}
+
+.polaroidRevealLeft.visible {
+  transform: rotate(-3.5deg) translateY(0) scale(1);
+}
+
+.polaroidRevealLeft.visible:hover {
+  transform: rotate(-1deg) translateY(0) scale(1.04);
+}
+
+/* ─── Onsen section — extra cinematic tint ───────────────────────────── */
+.onsenOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(30, 12, 6, 0.6) 0%,
+    rgba(0, 0, 0, 0.15) 60%,
+    rgba(0, 0, 0, 0.8) 100%
+  );
+  z-index: 1;
+}
+
+.onsenTextPanel {
+  position: relative;
+  z-index: 2;
+  padding: 4rem;
+  max-width: 540px;
+  margin: 0 auto;
+  text-align: center;
+  align-self: flex-end;
+  width: 100%;
+  padding-bottom: 5rem;
+}
+
+.onsenDivider {
+  width: 3rem;
+  height: 1px;
+  background: rgba(255, 220, 180, 0.35);
+  margin: 1.5rem auto;
+}
+
+.onsenHighlight {
+  color: rgba(255, 220, 180, 0.9);
+  font-style: italic;
+}
+
+/* ─── Mobile shit ─────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .textPanel,
+  .storySection.textRight .textPanel {
+    padding: 2.5rem 1.5rem;
+    max-width: 100%;
+    margin: 0;
+  }
+
+  .polaroidWrapLeft {
+    top: 5.5rem;
+    bottom: auto;
+    left: 3rem;
+    rotate: -3.5deg;
+    scale: 0.5;
+    transform-origin: top left;
+  }
+
+  .polaroidWrapRight {
+    top: 5.5rem;
+    bottom: auto;
+    right: 0.75rem;
+    scale: 0.5;
+    rotate: 3.5deg;
+    transform-origin: top right;
+  }
+
+  .tripHeader {
+    padding: 0 1.5rem 2rem;
+  }
+
+  .onsenTextPanel {
+    padding: 2.5rem 1.5rem 4rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .storyTitle {
+    font-size: clamp(1.6rem, 7vw, 2.2rem);
+  }
+
+  .textPanel,
+  .storySection.textRight .textPanel {
+    padding: 2rem 1.2rem;
+  }
+
+  .sectionDots {
+    right: 0.75rem;
+  }
+}

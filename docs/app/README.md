@@ -38,6 +38,7 @@ The root component that sets up the app structure:
       / → <Home />        ← Landing page
       /about → <About />  ← About page
       /workspace → <Workspace />  ← 3D workspace
+      /travel → <Travel />  ← Travel diary page
     </Routes>
   </Router>
 </ThemeProvider>
@@ -48,7 +49,7 @@ The root component that sets up the app structure:
 1. **ThemeProvider** wraps everything — all components can access `useTheme()`
 2. **HashRouter** provides client-side routing (hash-based for GitHub Pages compatibility)
 3. **Navigation** and **ThemeToggle** are outside `<Routes>`, so they appear on every page
-4. **Routes** define the three pages and their paths
+4. **Routes** define the four pages and their paths
 
 ---
 
@@ -81,5 +82,10 @@ src/
 ├── service-worker.tsx     → Workbox service worker
 ├── serviceWorkerRegistration.tsx → SW registration logic
 ├── reportWebVitals.tsx    → Performance monitoring
-└── custom.d.ts            → Custom TypeScript declarations
+├── custom.d.ts            → Custom TypeScript declarations
+pages/
+├── Home/                  → Landing page
+├── About/                 → About page
+├── Workspace/             → 3D workspace page
+└── Travel/                → Travel diary page
 ```

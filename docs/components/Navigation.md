@@ -35,7 +35,7 @@ const NAV_LINKS = [
   { to: '/', label: 'Home' },
   { to: '/about', label: 'About' },
   { to: '/workspace', label: 'Workspace' },
-  // ... more links as needed
+  { to: '/travel', label: 'Travel' },
 ];
 
 const isMobile = useIsMobile();

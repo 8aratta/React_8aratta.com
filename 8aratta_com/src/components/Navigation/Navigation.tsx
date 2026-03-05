@@ -9,6 +9,7 @@ const NAV_LINKS = [
   { to: '/', label: 'Home' },
   { to: '/about', label: 'About' },
   { to: '/workspace', label: 'Workspace' },
+  { to: '/travel', label: 'Travel' },
   // Extra links for testing mobile carousel behavior:
   // TODO: Make links non drag on mobile
   // { to: '/', label: 'Link 3' },
