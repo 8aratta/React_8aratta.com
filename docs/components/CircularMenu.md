@@ -18,6 +18,7 @@ Now with **carousel mode** — drag or scroll to spin the whole ring of links ar
 - **Emphasis & snap** — scale items up when they reach a focal angle, and optionally snap the nearest item into place when interaction stops
 - **Elliptical angle warping** — rectangular text pills get visually even spacing via an aspect-ratio distortion on the circle
 - **Automatically closes** when you navigate to a new page or click outside the menu
+- **Scroll lock** — while the menu is open, all scrolling on the page is blocked so the whole screen is dedicated to spinning the ring
 
 ---
 
@@ -257,6 +258,18 @@ The menu closes when:
 - The **route changes** (via `useLocation()` watching `location.pathname` — also resets rotation offset)
 
 The overlay is a transparent full-screen div that appears when the menu is open. In carousel mode it also handles drag and wheel events. The same pointer handlers are also forwarded to each `MenuItem`, so touches that land on a pill still drive the carousel. Smart multitasking.
+
+### Scroll Lock
+
+When the menu opens, `useMenuState` does three things to make sure nothing else on the page scrolls while you're spinning:
+
+1. Sets `document.body.style.overflow = 'hidden'` — kills window-level scroll
+2. Attaches a capturing `wheel` listener with `preventDefault()` — stops mouse-wheel scroll reaching any inner container (like the About page's snap-scroll div) before the carousel `onWheel` handler can read it for rotation
+3. Attaches a capturing `touchmove` listener with `preventDefault()` — same deal for touch
+
+All three are cleaned up when the menu closes or unmounts. The `{ passive: false }` flag is required on both listeners because modern browsers default to passive scroll listeners, which makes `preventDefault()` a no-op.
+
+The carousel's own `handleWheel` still works fine — it only reads `e.deltaY` to compute rotation and doesn't depend on the browser actually scrolling anything.
 
 ---
 

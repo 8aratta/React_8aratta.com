@@ -7,8 +7,11 @@ import styles from './Home.module.css';
 
 function Home() {
   const { theme } = useTheme();
-  const [introComplete, setIntroComplete] = useState(false);
-  const handleIntroComplete = useCallback(() => setIntroComplete(true), []);
+  const [introComplete, setIntroComplete] = useState(() => sessionStorage.getItem('maskIntroSeen') === 'true');
+  const handleIntroComplete = useCallback(() => {
+    sessionStorage.setItem('maskIntroSeen', 'true');
+    setIntroComplete(true);
+  }, []);
   const { mousePos, handleMouseMove, handleMouseLeave } = useMousePosition(MOUSE_SMOOTHING);
   const rotation = useGradientRotation({
     mousePos,

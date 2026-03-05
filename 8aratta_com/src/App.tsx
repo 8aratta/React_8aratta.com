@@ -12,7 +12,7 @@ function App() {
     <ThemeProvider>
       <Router>
         <Navigation />
-        <ThemeToggle isMobile={true} />
+        <ThemeToggle />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />

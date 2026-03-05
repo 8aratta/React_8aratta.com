@@ -32,8 +32,8 @@ The root component that sets up the app structure:
 ```tsx
 <ThemeProvider>           ← Theme state available everywhere
   <Router>                ← Hash-based routing
-    <Navigation />        ← Top nav bar (always visible)
-    <ThemeToggle />       ← Dark/Light toggle (always visible)
+    <Navigation />        ← Top nav bar (auto-hides on scroll down, reappears on scroll up)
+    <ThemeToggle />       ← Dark/Light toggle (auto-hides after 3s, proximity-aware)
     <Routes>
       / → <Home />        ← Landing page
       /about → <About />  ← About page

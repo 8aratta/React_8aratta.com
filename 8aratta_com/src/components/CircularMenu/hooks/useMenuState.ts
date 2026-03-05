@@ -26,6 +26,24 @@ export function useMenuState(
         onClose?.();
     }, [location.pathname]); // eslint-disable-line react-hooks/exhaustive-deps
 
+    // Lock scroll on every scrollable element while the menu is open
+    useEffect(() => {
+        if (!isOpen) return;
+
+        const preventScroll = (e: Event) => e.preventDefault();
+
+        const prevOverflow = document.body.style.overflow;
+        document.body.style.overflow = 'hidden';
+        document.addEventListener('wheel', preventScroll, { passive: false, capture: true });
+        document.addEventListener('touchmove', preventScroll, { passive: false, capture: true });
+
+        return () => {
+            document.body.style.overflow = prevOverflow;
+            document.removeEventListener('wheel', preventScroll, { capture: true });
+            document.removeEventListener('touchmove', preventScroll, { capture: true });
+        };
+    }, [isOpen]);
+
     const toggleMenu = useCallback(() => {
         setIsOpen(prev => !prev);
     }, []);

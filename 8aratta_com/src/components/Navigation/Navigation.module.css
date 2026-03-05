@@ -9,6 +9,11 @@
   justify-content: space-between;
   padding: 1.5rem 2rem;
   user-select: none;
+  transition: transform 0.3s ease;
+}
+
+.nav[data-hidden="true"] {
+  transform: translateY(-110%);
 }
 
 .leftSection {

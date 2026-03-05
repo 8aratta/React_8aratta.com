@@ -9,6 +9,7 @@ The Navigation component is the top bar you see on every page. It's always there
 - Shows the **8aratta logo** (swaps between dark and light versions depending on the theme — fancy, right?)
 - Displays a **live clock** that updates every second. Because knowing it's 3:47 AM while you're still coding is important life information.
 - Houses the **[CircularMenu](./CircularMenu.md)** — a radial navigation menu that fans out from a hamburger button with a liquid glass effect. Because plain link lists are so 2019.
+- **Auto-hides** when you scroll down and reappears when you scroll back up — because it's polite enough to get out of your way.
 
 ---
 
@@ -29,6 +30,15 @@ src/components/Navigation/
 2. A `setInterval` ticks every second to update the displayed time — formatted in a nice `h:mm AM/PM` style.
 3. The `useIsMobile()` hook detects viewport width (≤ 768 px) and toggles the CircularMenu between **carousel mode** on mobile and **standard radial mode** on desktop.
 4. Navigation links are defined as a `NAV_LINKS` array and handed off to the `CircularMenu` component.
+5. A **scroll listener** (capture phase) watches for scroll direction and hides/shows the nav accordingly.
+
+### Auto-Hide on Scroll
+
+The nav slides off the top of the screen (`translateY(-110%)`) when you scroll **down past 60px**, and slides back in the moment you scroll back **up**. The 60px threshold prevents the nav from hiding on tiny accidental nudges at the top of the page.
+
+The listener uses `{ capture: true }` so it catches scroll events from *any* scrollable element on the page — including inner-container scrollers like the About page's snap-scroll div, not just `window` scroll. It also reads `e.target.scrollTop` for element-based scrollers rather than `window.scrollY` (which would always be 0 when the window itself isn't scrolling).
+
+> **CSS note:** The nav does *not* have a `transform: translateY(0)` in its base styles — that would create a CSS containing block and cause `position: fixed` children (like the CircularMenu overlay) to be sized relative to the nav instead of the viewport. The transition works fine because CSS animates from the browser's implicit identity state to the explicit `translateY(-110%)`.
 
 ```tsx
 const NAV_LINKS = [

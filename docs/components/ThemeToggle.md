@@ -1,6 +1,6 @@
 # 🌗 ThemeToggle
 
-The ThemeToggle is a tiny but mighty button that lets you switch between dark and light mode. That's it. That's the component. But it does it with *style*.
+The ThemeToggle is a tiny but mighty button that lets you switch between dark and light mode. That's it. That's the component. But it does it with *style* — and now it also plays hide and seek.
 
 ---
 
@@ -8,7 +8,9 @@ The ThemeToggle is a tiny but mighty button that lets you switch between dark an
 
 - Renders a button with a **circle emoji** — ⚪ for dark mode (click to go light) and ⚫ for light mode (click to go dark)
 - Fires the `toggleTheme()` function from the ThemeContext when clicked
-- Supports an optional `isMobile` prop for responsive positioning
+- **Auto-hides** after 3 seconds of inactivity — slides left until only a 10px sliver peeks out from the edge
+- **Proximity-aware** — hovering near the bottom-left corner partially reveals it, then retreats when you leave
+- **Fully reveals** when you hover directly over it, and restarts the 3s idle timer when you leave
 - Includes proper `aria-label` for accessibility — because screen readers deserve nice things too
 
 ---
@@ -29,10 +31,10 @@ src/components/ThemeToggle/
 In the main `App.tsx`, it's rendered globally alongside the Navigation:
 
 ```tsx
-<ThemeToggle isMobile={true} />
+<ThemeToggle />
 ```
 
-The `isMobile` prop applies an additional CSS class for mobile-specific positioning. When `true`, the toggle is styled to sit nicely on smaller screens.
+No props needed — it always uses the fixed floating pill style. Previously had an `isMobile` prop, but since the mobile style is the only style now, that prop got axed.
 
 ---
 
@@ -41,7 +43,29 @@ The `isMobile` prop applies an additional CSS class for mobile-specific position
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `className` | `string` | `undefined` | Extra CSS class if you need custom styling |
-| `isMobile` | `boolean` | `false` | Applies mobile-specific positioning styles |
+
+---
+
+## Auto-Hide Behaviour
+
+The button has three states, all driven by CSS `transition: transform 0.4s ease` — no animation keyframes needed:
+
+| State | What's happening | Transform |
+|-------|-----------------|-----------|
+| **Visible** | Fully on screen | `none` |
+| **Hidden** | 3s idle timer fired | `translateX(-100% - 2rem + 10px)` — 10px peek |
+| **Proximity** | Cursor near bottom-left | `translateX(-100% - 2rem + 50%)` — half revealed |
+
+And how the states transition:
+- **On mount** → 3s timer starts
+- **Timer fires** → hidden
+- **Cursor enters proximity zone** → half-revealed (smooth slide, no animation)
+- **Cursor leaves proximity zone** → back to hidden
+- **Cursor reaches button** → fully revealed, timer restarts on leave
+
+### The Proximity Zone
+
+There's a transparent `5rem × 7rem` fixed div covering the bottom-left corner of the viewport. It's invisible and sits just behind the button (`z-index: 999`). Its only job is to catch `onMouseEnter` / `onMouseLeave` and toggle the proximity state — which lets the button react before the cursor actually reaches it.
 
 ---
 

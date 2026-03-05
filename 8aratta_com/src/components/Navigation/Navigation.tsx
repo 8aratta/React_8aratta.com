@@ -22,6 +22,7 @@ const NAV_LINKS = [
 
 function Navigation() {
   const [time, setTime] = useState(new Date());
+  const [hidden, setHidden] = useState(false);
   const { theme } = useTheme();
   const isMobile = useIsMobile();
 
@@ -31,6 +32,23 @@ function Navigation() {
     }, 1000);
 
     return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    let lastScrollY = 0;
+
+    const onScroll = (e: Event) => {
+      const target = e.target as Element | Document;
+      const currentScrollY =
+        target === document || target === document.documentElement || target === document.body
+          ? window.scrollY
+          : (target as Element).scrollTop;
+      setHidden(currentScrollY > lastScrollY && currentScrollY > 60);
+      lastScrollY = currentScrollY;
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true, capture: true });
+    return () => window.removeEventListener('scroll', onScroll, { capture: true });
   }, []);
 
   const formatTime = (date: Date) => {
@@ -47,7 +65,7 @@ function Navigation() {
       : '/assets/images/logo.png';
 
   return (
-    <nav className={styles.nav} data-theme={theme}>
+    <nav className={styles.nav} data-theme={theme} data-hidden={hidden}>
       <div className={styles.leftSection}>
         <Link to="/" className={styles.logo}>
           <img src={logo} alt="8aratta" draggable="false" />
