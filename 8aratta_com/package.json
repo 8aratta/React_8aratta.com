@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "https://8aratta.com",
   "dependencies": {
+    "@8aratta/circular-menu": "^1.0.0",
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.5.0",
     "@shadergradient/react": "^2.4.20",

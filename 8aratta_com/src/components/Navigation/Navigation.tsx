@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import styles from './Navigation.module.css';
 import { useTheme } from '../../contexts';
 import { useIsMobile } from '../../hooks';
-import { CircularMenu } from '../CircularMenu';
+import { CircularMenu } from '@8aratta/circular-menu';
+import './CircularMenu.css';
 
 const NAV_LINKS = [
   { to: '/', label: 'Home' },
@@ -75,12 +76,30 @@ function Navigation() {
       <CircularMenu
         radius={130}
         links={NAV_LINKS}
+        renderLink={(link, linkProps) => (
+          <Link to={link.to} {...linkProps}>{link.label}</Link>
+        )}
+        openIcon={
+          <img
+            src={theme === 'dark' ? '/assets/images/menu_white(san).png' : '/assets/images/menu(san).png'}
+            alt="Open menu"
+            draggable="false"
+          />
+        }
+        closeIcon={
+          <img
+            src={theme === 'dark' ? '/assets/images/menu_white(batsu).png' : '/assets/images/menu(batsu).png'}
+            alt="Close menu"
+            draggable="false"
+          />
+        }
+        theme={theme}
         carousel={isMobile}
         snap={isMobile}
         emphasize={isMobile ? 225 : false}
         emphasisScale={isMobile ? 1.35 : undefined}
         neutralScale={isMobile ? 0.33 : undefined}
-        angle={isMobile ? 'bottom' : 220} // With three links open up to bottom because emphasis would be on 225 then... idk maybe angle should define start point instead of direction
+        angle={isMobile ? 'bottom' : 220}
         carryMomentum
         introSpin
       />
