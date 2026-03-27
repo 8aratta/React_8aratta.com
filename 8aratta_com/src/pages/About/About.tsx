@@ -68,6 +68,7 @@ function About() {
   const purpose = useScrollReveal(containerRef, 0.15);
   const identity = useScrollReveal(containerRef, 0.15);
   const whyEight = useScrollReveal(containerRef, 0.15);
+  const devSection = useScrollReveal(containerRef, 0.15);
 
   return (
     <div className={styles.aboutPage} data-theme={theme} ref={containerRef}>
@@ -223,6 +224,27 @@ function About() {
             <span className={styles.whyClosingAccent}>personal stylistic decision</span>{' '}
             that felt right for my online identity.
           </p>
+        </div>
+      </section>
+
+      {/* ─── Section 6: Developer Portfolio ─── */}
+      <section className={`${styles.section} ${styles.devSection}`}>
+        <div
+          ref={devSection.ref}
+          className={`${styles.sectionInner} ${devSection.isVisible ? styles.visible : ''}`}
+        >
+          <h2 className={styles.devTitle}>Interested in my developer work?</h2>
+          <p className={styles.devText}>
+            If you're curious about my projects, coding, or want to see my portfolio as a developer, check out my dedicated developer site:
+          </p>
+          <a
+            className={styles.devLink}
+            href="https://8aratta.dev"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Visit 8aratta.dev
+          </a>
         </div>
       </section>
     </div>

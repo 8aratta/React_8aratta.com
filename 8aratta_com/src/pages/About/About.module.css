@@ -693,6 +693,158 @@
 }
 
 /* ══════════════════════════════════
+   Section 6 — Developer Portfolio
+   ══════════════════════════════════ */
+
+/*
+ UFF I REALLY NEED TO FUCKING REFACTOR THIS CSS, IT'S A DISASTER
+ TO future me. IDGAF pls add constants.css or something and stop copy-pasting styles everywhere  
+*/
+.devSection {
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0f0f0f 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.devSection::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(ellipse at 20% 50%, #222222 0%, transparent 50%);
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.aboutPage[data-theme="light"] .devSection {
+  background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 50%, #e8e8e8 100%);
+}
+
+.aboutPage[data-theme="light"] .devSection::before {
+  background: radial-gradient(ellipse at 20% 50%, #cccccc 0%, transparent 50%);
+  opacity: 0.2;
+}
+
+.devSection .sectionInner {
+  position: relative;
+  z-index: 1;
+  padding: 3rem;
+  border: 1px solid #ffffff15;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+  transition-delay: 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.aboutPage[data-theme="light"] .devSection .sectionInner {
+  border-color: #00000015;
+  background: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.08);
+}
+
+.devTitle {
+  font-family: 'Resoft', sans-serif;
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  margin: 0 0 1.5rem;
+  color: #ffffff;
+  mix-blend-mode: difference;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.2s, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.2s;
+}
+
+.devSection .sectionInner.visible .devTitle {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.aboutPage[data-theme="light"] .devTitle {
+  color: #1a1a1a;
+  mix-blend-mode: normal;
+}
+
+.devText {
+  font-size: clamp(1rem, 1.5vw, 1.15rem);
+  line-height: 1.9;
+  font-weight: 300;
+  color: #999;
+  max-width: 600px;
+  margin: 0 auto 2rem;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.4s, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.4s;
+}
+
+.devSection .sectionInner.visible .devText {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.aboutPage[data-theme="light"] .devText {
+  color: #555;
+}
+
+/* THIS MF WONT CENTER!*/
+.devLink {
+  display: inline-block;
+  margin: 0 auto;
+  padding: 1em 2.5em;
+  font-size: 1.1rem;
+  font-family: 'Resoft', sans-serif;
+  font-weight: 500;
+  color: #fff;
+  background: linear-gradient(135deg, #666666 0%, #999999 100%);
+  border: 2px solid transparent;
+  border-radius: 2.8em;
+  text-decoration: none;
+  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.25);
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  opacity: 0;
+  align-items: center;
+  transform: translateY(10px) scale(0.95);
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.6s,
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.6s,
+    background 0.4s ease,
+    box-shadow 0.4s ease;
+  text-align: center;
+}
+
+.devSection .sectionInner.visible .devLink {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+
+.devLink:hover,
+.devLink:focus {
+  background: linear-gradient(135deg, #888888 0%, #bbbbbb 100%);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.35);
+  transform: translateY(-2px) scale(1.02);
+}
+
+.aboutPage[data-theme="light"] .devLink {
+  color: #1a1a1a;
+  background: linear-gradient(135deg, #d0d0d0 0%, #8f8f8f 100%);
+  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.15);
+}
+
+.aboutPage[data-theme="light"] .devLink:hover,
+.aboutPage[data-theme="light"] .devLink:focus {
+  background: linear-gradient(135deg, #bdbdbd 0%, #a8a8a8 100%);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.22);
+  color: #000;
+}
+
+/* ══════════════════════════════════
    Reduced motion
    ══════════════════════════════════ */
 @media (prefers-reduced-motion: reduce) {
@@ -728,7 +880,7 @@
 }
 
 /* ══════════════════════════════════
-   Responsive — Tablet
+   Responsive — Tablets I guess?
    ══════════════════════════════════ */
 @media (max-width: 1024px) {
   .section {
@@ -795,7 +947,7 @@
 }
 
 /* ══════════════════════════════════
-   Responsive — Small mobile
+   Responsive — Small mobile for ants
    ══════════════════════════════════ */
 @media (max-width: 480px) {
   .section {

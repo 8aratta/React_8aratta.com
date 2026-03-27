@@ -55,7 +55,7 @@ function Home() {
             </h1>
 
             <h2 className={styles.heroDescription}>
-              <span>Developer</span>
+              <span>That's me!</span>
             </h2>
           </div>
         </>

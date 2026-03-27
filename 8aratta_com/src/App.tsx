@@ -14,8 +14,8 @@ function App() {
         <ThemeToggle />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
           <Route path="/travel" element={<Travel />} />
+          <Route path="/about" element={<About />} />
         </Routes>
       </Router>
     </ThemeProvider>

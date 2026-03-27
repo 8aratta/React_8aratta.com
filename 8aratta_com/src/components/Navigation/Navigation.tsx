@@ -8,8 +8,8 @@ import './CircularMenu.css';
 
 const NAV_LINKS = [
   { to: '/', label: 'Home' },
-  { to: '/about', label: 'About' },
   { to: '/travel', label: 'Travel' },
+  { to: '/about', label: 'About' },
 ];
 
 function Navigation() {
