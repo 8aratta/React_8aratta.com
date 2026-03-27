@@ -9,16 +9,7 @@ import './CircularMenu.css';
 const NAV_LINKS = [
   { to: '/', label: 'Home' },
   { to: '/about', label: 'About' },
-  { to: '/workspace', label: 'Workspace' },
   { to: '/travel', label: 'Travel' },
-  // Extra links for testing mobile carousel behavior:
-  // TODO: Make links non drag on mobile
-  // { to: '/', label: 'Link 3' },
-  // { to: '/', label: 'Link 4' },
-  // { to: '/', label: 'Link 5' },
-  // { to: '/', label: 'Link 7' },
-  // { to: '/', label: 'Link 8' },
-  // { to: '/', label: 'Link 9' },
 ];
 
 function Navigation() {
